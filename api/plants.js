@@ -1,4 +1,4 @@
-module.exports = (req, res) => {
+export default function handler(req, res) {
   const plants = [
     {
       id: 'tulsi',
@@ -30,7 +30,7 @@ module.exports = (req, res) => {
       scientificName: 'Withania somnifera',
       category: 'Vitality / Tonic',
       description: 'A revered restorative Rasayana herb in Ayurveda, known for modulating cortisol, supporting cognitive clarity, and boosting cellular vitality.',
-      imageUrl: 'https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=800&q=80'
+      imageUrl: 'https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=800&q=80'
     },
     {
       id: 'moringa',
@@ -38,7 +38,7 @@ module.exports = (req, res) => {
       scientificName: 'Moringa oleifera',
       category: 'Nutrient Superfood',
       description: 'A nutrient-dense superfood herb containing 7x more Vitamin C than oranges and dense polyphenol antioxidants.',
-      imageUrl: 'https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=800&q=80'
+      imageUrl: 'https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=800&q=80'
     },
     {
       id: 'mint',
@@ -55,4 +55,4 @@ module.exports = (req, res) => {
     count: plants.length,
     data: plants
   });
-};
+}
