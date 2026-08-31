@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meadleaf — AI-Powered Medicinal Plant Recognition</title>
+  <meta name="description" content="Identify medicinal plants with AI. Upload an image or capture a photo and let Meadleaf recognize the plant and help you discover more about it." />
+  
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%231C6B40'><path d='M12 2C6.5 2 2 6.5 2 12c0 3.5 1.8 6.6 4.6 8.4C8.4 17.6 11 14 12 10c1 4 3.6 7.6 5.4 10.4C20.2 18.6 22 15.5 22 12c0-5.5-4.5-10-10-10z'/></svg>" type="image/svg+xml" />
+
+  <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Custom Stylesheet with Cache Busting -->
+  <link rel="stylesheet" href="css/styles.css?v=7.0" />
+</head>
+<body>
+
+  <!-- ========================================================================
+       1. STICKY NAVBAR
+       ======================================================================== -->
+  <header class="site-header">
+    <div class="container">
+      <nav class="navbar" aria-label="Main Navigation">
+        <!-- Brand Logo -->
+        <a href="#" class="brand-logo" aria-label="Meadleaf Home">
+          <div class="brand-icon-wrapper">
+            <i data-lucide="leaf" style="width: 20px; height: 20px;"></i>
+          </div>
+          <span>MEADLEAF</span>
+        </a>
+
+        <!-- Center Navigation Links -->
+        <ul class="nav-menu">
+          <li><a href="#" class="nav-link active">Home</a></li>
+          <li><a href="#upload-section" class="nav-link">Identify Plant</a></li>
+          <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
+          <li><a href="#plants-section" class="nav-link">Medicinal Plants</a></li>
+          <li><a href="#about-section" class="nav-link">About</a></li>
+        </ul>
+
+        <!-- Right Auth / Action CTAs -->
+        <div class="nav-actions">
+          <button class="btn btn-ghost" type="button" onclick="alert('Login portal will be available in the upcoming project phase.')">Login</button>
+          <a href="#upload-section" class="btn btn-primary">
+            <span>Get Started</span>
+            <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
+          </a>
+        </div>
+
+        <!-- Mobile Menu Toggle Button -->
+        <button class="mobile-menu-toggle" id="mobile-menu-btn" aria-label="Toggle navigation menu">
+          <i data-lucide="menu"></i>
+        </button>
+      </nav>
+    </div>
+
+    <!-- Mobile Drawer Menu -->
+    <div class="mobile-nav-drawer" id="mobile-drawer">
+      <ul class="nav-menu">
+        <li><a href="#" class="nav-link active">Home</a></li>
+        <li><a href="#upload-section" class="nav-link">Identify Plant</a></li>
+        <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
+        <li><a href="#plants-section" class="nav-link">Medicinal Plants</a></li>
+        <li><a href="#about-section" class="nav-link">About</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="btn btn-secondary" type="button" onclick="alert('Login portal will be available in the upcoming project phase.')">Login</button>
+        <a href="#upload-section" class="btn btn-primary">Get Started</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ========================================================================
+         2. HERO SECTION
+         ======================================================================== -->
+    <section class="hero-section">
+      <div class="hero-bg-glow-1"></div>
+      <div class="hero-bg-glow-2"></div>
+
+      <div class="container">
+        <div class="hero-grid">
+          <!-- Left Column: Typography & CTAs -->
+          <div class="hero-content">
+            <div class="badge-pill">
+              <span class="badge-dot"></span>
+              <span>AI-Powered Plant Recognition</span>
+            </div>
+
+            <h1 class="hero-title">
+              Discover the Plant<br />
+              <span class="hero-title-highlight">Behind the Leaf.</span>
+            </h1>
+
+            <p class="hero-desc">
+              Identify medicinal plants with AI. Upload an image or capture a photo and let Meadleaf recognize the plant and help you discover more about it.
+            </p>
+
+            <div class="hero-cta-group">
+              <a href="#upload-section" class="btn btn-primary btn-lg btn-icon-pulse">
+                <i data-lucide="scan-line" style="width: 20px; height: 20px;"></i>
+                <span>Identify a Plant</span>
+              </a>
+              <a href="#plants-section" class="btn btn-secondary btn-lg">
+                <span>Explore Plants</span>
+                <i data-lucide="compass" style="width: 18px; height: 18px;"></i>
+              </a>
+            </div>
+
+            <!-- Supporting Trust & Tech Signals -->
+            <div class="hero-trust-row">
+              <div class="trust-item">
+                <i data-lucide="sparkles"></i>
+                <span>Deep Vision Features</span>
+              </div>
+              <div class="trust-item">
+                <i data-lucide="shield-check"></i>
+                <span>Direct Leaf Scanning</span>
+              </div>
+              <div class="trust-item">
+                <i data-lucide="book-open"></i>
+                <span>Botanical Taxonomy</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Premium AI Leaf Scanner Visualizer -->
+          <div class="hero-visual-wrapper">
+            <!-- Floating Botanical Pill Tag -->
+            <div class="floating-specie-tag">
+              <div class="tag-icon-circle">
+                <i data-lucide="leaf" style="width: 16px; height: 16px;"></i>
+              </div>
+              <div>
+                <div class="tag-text-bold">Ocimum sanctum</div>
+                <div class="tag-text-botanical">Holy Basil / Tulsi</div>
+              </div>
+            </div>
+
+            <!-- Main Scanner Card -->
+            <div class="hero-scan-card">
+              <div class="hero-image-container">
+                <!-- Realistic high-resolution botanical leaf image -->
+                <img 
+                  src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=1200&q=80" 
+                  alt="Medicinal botanical leaf specimen showing intricate venation" 
+                  class="hero-plant-img"
+                />
+
+                <!-- AI Scanning Overlay Layer -->
+                <div class="ai-scan-overlay">
+                  <!-- Animated Laser Sweep -->
+                  <div class="scan-laser-line"></div>
+
+                  <!-- Neural Target Nodes -->
+                  <div class="ai-node ai-node-1"></div>
+                  <div class="ai-node ai-node-2"></div>
+                  <div class="ai-node ai-node-3"></div>
+
+                  <!-- Bounding Box Frame with Corner Accents -->
+                  <div class="ai-bounding-box">
+                    <span class="ai-corner ai-corner-tl"></span>
+                    <span class="ai-corner ai-corner-tr"></span>
+                    <span class="ai-corner ai-corner-bl"></span>
+                    <span class="ai-corner ai-corner-br"></span>
+                  </div>
+                </div>
+
+                <!-- HUD Status Overlay Bar -->
+                <div class="hero-hud-chip">
+                  <div class="hud-left">
+                    <div class="hud-radar-icon">
+                      <i data-lucide="cpu" style="width: 18px; height: 18px;"></i>
+                    </div>
+                    <div>
+                      <div class="hud-title">Morphological Feature Map</div>
+                      <div class="hud-subtitle">Leaf Margin & Venation Extracted</div>
+                    </div>
+                  </div>
+                  <span class="hud-status-badge">Neural Scan Active</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         3. MAIN FUNCTIONAL IMAGE UPLOAD / SCAN SECTION
+         ======================================================================== -->
+    <section class="scan-section" id="upload-section">
+      <div class="container container-narrow">
+        <div class="section-header">
+          <span class="section-tag">Interactive Scanner</span>
+          <h2 class="section-title">Identify a Medicinal Plant</h2>
+          <p class="section-subtitle">Upload an image or capture a photo to get started.</p>
+        </div>
+
+        <div class="upload-wrapper">
+          <!-- Hidden Native File Inputs -->
+          <input type="file" id="plant-file-input" class="hidden-file-input" accept="image/png, image/jpeg, image/jpg, image/webp" />
+          <input type="file" id="plant-camera-input" class="hidden-file-input" accept="image/*" capture="environment" />
+
+          <!-- A. IDLE DROPZONE STATE -->
+          <div class="upload-dropzone" id="upload-dropzone">
+            <div class="upload-icon-circle">
+              <i data-lucide="image-up" style="width: 34px; height: 34px;"></i>
+            </div>
+            <h3 class="dropzone-title">Drop your plant image here</h3>
+            <p class="dropzone-subtext">or choose an image from your device</p>
+
+            <div class="upload-actions-row">
+              <button type="button" class="btn btn-primary" id="choose-file-btn">
+                <i data-lucide="folder-open" style="width: 18px; height: 18px;"></i>
+                <span>Choose Image</span>
+              </button>
+              <button type="button" class="btn btn-secondary" id="open-camera-btn">
+                <i data-lucide="camera" style="width: 18px; height: 18px;"></i>
+                <span>Use Camera</span>
+              </button>
+            </div>
+
+            <div class="supported-formats-info">
+              <i data-lucide="info" style="width: 14px; height: 14px;"></i>
+              <span>Supported formats: JPG, JPEG, PNG • Direct instant upload</span>
+            </div>
+          </div>
+
+          <!-- B. ACTIVE PREVIEW STATE (Rendered after user selects an image) -->
+          <div class="upload-preview-container" id="upload-preview-state">
+            <div class="upload-preview-header">
+              <div class="preview-badge-status">
+                <i data-lucide="check-circle-2" style="width: 16px; height: 16px;"></i>
+                <span>Image Selected</span>
+              </div>
+              <button type="button" class="btn btn-ghost" id="change-image-btn">
+                <i data-lucide="refresh-cw" style="width: 16px; height: 16px;"></i>
+                <span>Choose Another</span>
+              </button>
+            </div>
+
+            <div class="preview-layout">
+              <div class="preview-image-box">
+                <img id="preview-img" src="" alt="Selected plant preview" class="preview-img-element" />
+              </div>
+
+              <div class="preview-info-panel">
+                <div class="file-meta-card">
+                  <div class="file-meta-name" id="file-name-display">leaf_sample.jpg</div>
+                  <div class="file-meta-stats">
+                    <span id="file-size-display">1.42 MB</span>
+                    <span>Ready for AI Feature Extraction</span>
+                  </div>
+                </div>
+
+                <p style="font-size: 0.9rem; color: var(--text-secondary);">
+                  Your image is primed for inference. Click below to initiate deep-learning botanical taxonomy classification.
+                </p>
+
+                <div class="preview-actions-group">
+                  <button type="button" class="btn btn-primary btn-lg" id="analyze-plant-btn">
+                    <i data-lucide="scan" style="width: 20px; height: 20px;"></i>
+                    <span>Analyze Plant</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- C. SIMULATED AI ANALYSIS PROCESSING STATE -->
+          <div class="analysis-progress-card" id="analysis-progress-card">
+            <div class="analysis-spinner-wrap">
+              <div class="analysis-spinner-ring"></div>
+              <div class="analysis-center-icon">
+                <i data-lucide="leaf" style="width: 28px; height: 28px;"></i>
+              </div>
+            </div>
+
+            <h3 class="analysis-title">Processing Botanical Sample</h3>
+            <div class="analysis-step-text" id="analysis-step-text">Initializing neural model...</div>
+
+            <div class="progress-bar-track">
+              <div class="progress-bar-fill" id="progress-bar-fill"></div>
+            </div>
+
+            <!-- Placeholder result banner shown upon simulated completion -->
+            <div class="analysis-placeholder-result" id="analysis-placeholder-result">
+              <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <i data-lucide="sparkles" style="color: #34D399; width: 22px; height: 22px; flex-shrink: 0; margin-top: 2px;"></i>
+                <div>
+                  <h4 style="color: #FFFFFF; font-size: 1.05rem; margin-bottom: 0.3rem;">Pre-Inference Processing Complete</h4>
+                  <p style="color: rgba(255, 255, 255, 0.75); font-size: 0.88rem; line-height: 1.5; margin-bottom: 1rem;">
+                    Visual features and leaf morphology have been normalized. The system is ready to connect with the trained deep-learning classification pipeline.
+                  </p>
+                  <button type="button" class="btn btn-outline-green" id="reanalyze-btn" style="color: #34D399; border-color: #34D399;">
+                    <i data-lucide="rotate-ccw" style="width: 16px; height: 16px;"></i>
+                    <span>Scan Another Leaf</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         4. HOW IT WORKS SECTION
+         ======================================================================== -->
+    <section class="how-section" id="how-it-works">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Process Overview</span>
+          <h2 class="section-title">How Meadleaf Works</h2>
+          <p class="section-subtitle">A seamless end-to-end pathway from raw leaf capture to verified botanical identification.</p>
+        </div>
+
+        <div class="steps-grid">
+          <!-- Step 1 -->
+          <div class="step-card">
+            <div class="step-number-badge">01</div>
+            <div class="step-icon-wrap">
+              <i data-lucide="upload-cloud" style="width: 28px; height: 28px;"></i>
+            </div>
+            <h3 class="step-title">Upload</h3>
+            <p class="step-desc">Upload a clear image of a plant or take a snapshot directly with your camera.</p>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="step-card">
+            <div class="step-number-badge">02</div>
+            <div class="step-icon-wrap">
+              <i data-lucide="sliders-horizontal" style="width: 28px; height: 28px;"></i>
+            </div>
+            <h3 class="step-title">Validate & Process</h3>
+            <p class="step-desc">Prepare the image for reliable recognition through geometric normalization and noise filtering.</p>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="step-card">
+            <div class="step-number-badge">03</div>
+            <div class="step-icon-wrap">
+              <i data-lucide="cpu" style="width: 28px; height: 28px;"></i>
+            </div>
+            <h3 class="step-title">Analyze</h3>
+            <p class="step-desc">Extract visual features using deep learning convolutional neural networks.</p>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="step-card">
+            <div class="step-number-badge">04</div>
+            <div class="step-icon-wrap">
+              <i data-lucide="check-circle" style="width: 28px; height: 28px;"></i>
+            </div>
+            <h3 class="step-title">Identify</h3>
+            <p class="step-desc">Receive the predicted plant species alongside structured botanical classification.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         5. FEATURE SECTION
+         ======================================================================== -->
+    <section class="features-section" id="about-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Core Capabilities</span>
+          <h2 class="section-title">Built for Real-World Plant Recognition</h2>
+          <p class="section-subtitle">Designed to bridge traditional herbal knowledge with modern machine intelligence.</p>
+        </div>
+
+        <div class="features-grid">
+          <!-- Feature 1 -->
+          <div class="feature-card">
+            <div class="feature-icon-box">
+              <i data-lucide="brain-circuit"></i>
+            </div>
+            <h3 class="feature-title">AI-Powered Recognition</h3>
+            <p class="feature-desc">Deep-learning-based visual recognition for medicinal plant identification, recognizing complex venation and morphology.</p>
+          </div>
+
+          <!-- Feature 2 -->
+          <div class="feature-card">
+            <div class="feature-icon-box">
+              <i data-lucide="scan"></i>
+            </div>
+            <h3 class="feature-title">Simple Image Scanning</h3>
+            <p class="feature-desc">Upload an image or capture a photo directly from your device with frictionless drag-and-drop support.</p>
+          </div>
+
+          <!-- Feature 3 -->
+          <div class="feature-card">
+            <div class="feature-icon-box">
+              <i data-lucide="book-marked"></i>
+            </div>
+            <h3 class="feature-title">Plant Knowledge</h3>
+            <p class="feature-desc">Discover useful information about identified medicinal plants, including binomial taxonomy and therapeutic applications.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         6. FEATURED PLANTS SECTION
+         ======================================================================== -->
+    <section class="plants-section" id="plants-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Botanical Catalog</span>
+          <h2 class="section-title">Explore Medicinal Plants</h2>
+          <p class="section-subtitle">Representative medicinal species targeted for classification in upcoming model releases.</p>
+        </div>
+
+        <div class="plants-grid">
+          <!-- Plant 1: Tulsi -->
+          <div class="plant-card">
+            <div class="plant-img-wrapper">
+              <img src="assets/images/tulsi_real.jpg" alt="Tulsi (Holy Basil) plant" class="plant-img" />
+              <span class="plant-tag-pill">Herbal / Adaptogen</span>
+            </div>
+            <div class="plant-content">
+              <div class="plant-names">
+                <h3 class="plant-common-name">Tulsi (Holy Basil)</h3>
+                <div class="plant-sci-name">Ocimum sanctum</div>
+              </div>
+              <div class="plant-card-footer">
+                <button type="button" class="btn btn-outline-green view-plant-btn" data-plant="tulsi">
+                  <span>View Plant</span>
+                  <i data-lucide="external-link" style="width: 14px; height: 14px;"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Plant 2: Neem -->
+          <div class="plant-card">
+            <div class="plant-img-wrapper">
+              <img src="assets/images/neem_real.jpg" alt="Neem leaves with twigs" class="plant-img" />
+              <span class="plant-tag-pill">Antimicrobial</span>
+            </div>
+            <div class="plant-content">
+              <div class="plant-names">
+                <h3 class="plant-common-name">Neem</h3>
+                <div class="plant-sci-name">Azadirachta indica</div>
+              </div>
+              <div class="plant-card-footer">
+                <button type="button" class="btn btn-outline-green view-plant-btn" data-plant="neem">
+                  <span>View Plant</span>
+                  <i data-lucide="external-link" style="width: 14px; height: 14px;"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Plant 3: Aloe Vera -->
+          <div class="plant-card">
+            <div class="plant-img-wrapper">
+              <img src="https://images.unsplash.com/photo-1596547609652-9cf5d8d76921?auto=format&fit=crop&w=800&q=80" alt="Aloe Vera Plant" class="plant-img" />
+              <span class="plant-tag-pill">Dermal Soothing</span>
+            </div>
+            <div class="plant-content">
+              <div class="plant-names">
+                <h3 class="plant-common-name">Aloe Vera</h3>
+                <div class="plant-sci-name">Aloe barbadensis Miller</div>
+              </div>
+              <div class="plant-card-footer">
+                <button type="button" class="btn btn-outline-green view-plant-btn" data-plant="aloe">
+                  <span>View Plant</span>
+                  <i data-lucide="external-link" style="width: 14px; height: 14px;"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Plant 4: Ashwagandha -->
+          <div class="plant-card">
+            <div class="plant-img-wrapper">
+              <img src="https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=800&q=80" alt="Ashwagandha Herb" class="plant-img" />
+              <span class="plant-tag-pill">Vitality / Tonic</span>
+            </div>
+            <div class="plant-content">
+              <div class="plant-names">
+                <h3 class="plant-common-name">Ashwagandha</h3>
+                <div class="plant-sci-name">Withania somnifera</div>
+              </div>
+              <div class="plant-card-footer">
+                <button type="button" class="btn btn-outline-green view-plant-btn" data-plant="ashwagandha">
+                  <span>View Plant</span>
+                  <i data-lucide="external-link" style="width: 14px; height: 14px;"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Plant 5: Moringa -->
+          <div class="plant-card">
+            <div class="plant-img-wrapper">
+              <img src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=800&q=80" alt="Moringa Leaf" class="plant-img" />
+              <span class="plant-tag-pill">Nutrient Superfood</span>
+            </div>
+            <div class="plant-content">
+              <div class="plant-names">
+                <h3 class="plant-common-name">Moringa</h3>
+                <div class="plant-sci-name">Moringa oleifera</div>
+              </div>
+              <div class="plant-card-footer">
+                <button type="button" class="btn btn-outline-green view-plant-btn" data-plant="moringa">
+                  <span>View Plant</span>
+                  <i data-lucide="external-link" style="width: 14px; height: 14px;"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Plant 6: Mint -->
+          <div class="plant-card">
+            <div class="plant-img-wrapper">
+              <img src="https://images.unsplash.com/photo-1628556270448-4d4e4148e1b1?auto=format&fit=crop&w=800&q=80" alt="Peppermint leaves" class="plant-img" />
+              <span class="plant-tag-pill">Digestive Herb</span>
+            </div>
+            <div class="plant-content">
+              <div class="plant-names">
+                <h3 class="plant-common-name">Mint (Peppermint)</h3>
+                <div class="plant-sci-name">Mentha piperita</div>
+              </div>
+              <div class="plant-card-footer">
+                <button type="button" class="btn btn-outline-green view-plant-btn" data-plant="mint">
+                  <span>View Plant</span>
+                  <i data-lucide="external-link" style="width: 14px; height: 14px;"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="plants-model-note">
+          <i data-lucide="info" style="width: 14px; height: 14px; vertical-align: middle; margin-right: 4px;"></i>
+          <span>Species shown are UI placeholders representing target classes in the upcoming deep-learning recognition dataset.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         7. FINAL CALL TO ACTION BANNER
+         ======================================================================== -->
+    <section class="final-cta-section">
+      <div class="container">
+        <div class="cta-banner-card">
+          <div class="cta-banner-glow"></div>
+          <div class="cta-banner-content">
+            <h2 class="cta-title">Have a Plant to Identify?</h2>
+            <p class="cta-subtitle">Let Meadleaf help you discover what’s growing around you.</p>
+            <a href="#upload-section" class="btn cta-banner-btn">
+              <span>🌿 Identify a Plant</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========================================================================
+       8. FOOTER
+       ======================================================================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <div class="brand-icon-wrapper" style="width: 32px; height: 32px;">
+              <i data-lucide="leaf" style="width: 16px; height: 16px;"></i>
+            </div>
+            <span>MEADLEAF</span>
+          </div>
+          <p class="footer-tagline">AI-powered medicinal plant recognition platform.</p>
+        </div>
+
+        <ul class="footer-links-list">
+          <li><a href="#" class="footer-link">Home</a></li>
+          <li><a href="#upload-section" class="footer-link">Identify Plant</a></li>
+          <li><a href="#plants-section" class="footer-link">Medicinal Plants</a></li>
+          <li><a href="#about-section" class="footer-link">About</a></li>
+          <li><a href="javascript:void(0)" onclick="alert('Login portal will be available in the upcoming project phase.')" class="footer-link">Login</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 Meadleaf. Final Year Project.</div>
+        <div style="font-size: 0.8rem; color: rgba(255, 255, 255, 0.4);">
+          Deep Learning & Botanical Vision Research
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================================
+       MODALS: CAMERA CAPTURE & PLANT DETAILS
+       ======================================================================== -->
+  <!-- Live Camera Modal -->
+  <div class="camera-modal" id="camera-modal">
+    <div class="camera-modal-dialog">
+      <div class="camera-modal-header">
+        <h3 style="font-size: 1.1rem; color: var(--primary-deep); display: flex; align-items: center; gap: 0.5rem;">
+          <i data-lucide="camera" style="color: var(--primary-base);"></i>
+          <span>Capture Plant Specimen</span>
+        </h3>
+        <button type="button" class="plant-modal-close" id="close-camera-modal-btn">
+          <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+        </button>
+      </div>
+
+      <div class="camera-video-container">
+        <video id="camera-stream" autoplay playsinline></video>
+        <div class="camera-viewfinder"></div>
+      </div>
+
+      <div class="camera-modal-footer">
+        <button type="button" class="btn btn-primary btn-lg" id="snap-photo-btn">
+          <i data-lucide="aperture" style="width: 20px; height: 20px;"></i>
+          <span>Capture Snapshot</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Plant Details Info Modal -->
+  <div class="plant-modal" id="plant-modal">
+    <div class="plant-modal-dialog">
+      <button type="button" class="plant-modal-close" id="plant-modal-close">
+        <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+      </button>
+      <div style="border-radius: var(--radius-md); overflow: hidden; aspect-ratio: 16/10; margin-bottom: 1.25rem;">
+        <img id="plant-modal-img" src="" alt="Botanical Plant" style="width: 100%; height: 100%; object-fit: cover;" />
+      </div>
+      <h3 id="plant-modal-title" style="font-size: 1.4rem; color: var(--primary-deep); margin-bottom: 0.2rem;">Plant Title</h3>
+      <div id="plant-modal-sci" style="font-style: italic; color: var(--primary-base); font-weight: 500; font-size: 0.95rem; margin-bottom: 1rem;">Binomial name</div>
+      <p id="plant-modal-desc" style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1.5rem;">Plant description...</p>
+      <div style="display: flex; justify-content: flex-end;">
+        <a href="#upload-section" class="btn btn-primary" onclick="document.getElementById('plant-modal').classList.remove('active')">
+          <i data-lucide="scan" style="width: 16px; height: 16px;"></i>
+          <span>Scan Similar Leaf</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main JavaScript File -->
+  <script src="js/main.js"></script>
+</body>
+</html>
