@@ -151,14 +151,116 @@
       background: #FEF3C7;
       color: #B45309;
     }
+    /* Mobile Drawer & Responsive Layout */
+    .sidebar-toggle-btn {
+      background: #F0FDF4;
+      border: 1px solid rgba(46, 179, 105, 0.25);
+      border-radius: 8px;
+      padding: 0.45rem 0.55rem;
+      cursor: pointer;
+      display: none;
+      color: #15803D;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+    .sidebar-toggle-btn:hover {
+      background: #DCFCE7;
+    }
+    .sidebar-close-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #6B7280;
+      padding: 0.35rem;
+      border-radius: 8px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    .sidebar-close-btn:hover {
+      background: #F3F4F6;
+      color: #111827;
+    }
+    .sidebar-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 998;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+    .sidebar-backdrop.active {
+      display: block;
+    }
+
     @media (max-width: 900px) {
-      .dash-sidebar { transform: translateX(-100%); }
-      .dash-sidebar.mobile-open { transform: translateX(0); }
+      .sidebar-toggle-btn {
+        display: inline-flex !important;
+      }
+      .sidebar-close-btn {
+        display: inline-flex !important;
+      }
+      .dash-sidebar {
+        transform: translateX(-100%) !important;
+        position: fixed !important;
+        top: 0 !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        width: 280px !important;
+        max-width: 85vw !important;
+        z-index: 1000 !important;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.25) !important;
+      }
+      .dash-sidebar.mobile-open {
+        transform: translateX(0) !important;
+      }
+      .dash-main {
+        margin-left: 0 !important;
+        width: 100% !important;
+        min-width: 0 !important;
+      }
+      .dash-content {
+        padding: 1.25rem 1rem !important;
+      }
+      .dash-topbar {
+        padding: 0.75rem 1rem !important;
+        height: auto !important;
+        min-height: 60px !important;
+      }
+      #plant-scan-result-card {
+        padding: 1.25rem 1rem !important;
+      }
+      .dosage-cards-grid {
+        grid-template-columns: 1fr !important;
+      }
+    }
+
+    @media (max-width: 500px) {
+      #dash-user-role {
+        display: none !important;
+      }
+      #dash-page-title {
+        font-size: 1rem !important;
+      }
+      #dash-breadcrumb {
+        font-size: 0.7rem !important;
+      }
+      #plant-preview-img {
+        width: 110px !important;
+        height: 110px !important;
+      }
+      #plant-result-name {
+        font-size: 1.45rem !important;
+      }
+    }
       .dash-main { margin-left: 0; }
     }
   </style>
 </head>
 <body>
+  <div id="dash-sidebar-backdrop" class="sidebar-backdrop"></div>
 
   <!-- Left Sidebar Navigation -->
   <aside class="dash-sidebar" id="dash-sidebar">
@@ -169,6 +271,11 @@
       <div>
         <div style="font-weight: 800; font-size: 1.15rem; color: #15803D; letter-spacing: -0.02em;">MedLeaf AI</div>
         <div style="font-size: 0.72rem; color: #6B7280; text-transform: uppercase; font-weight: 600;">Botanical System</div>
+      </div>
+      <div style="margin-left: auto;">
+        <button id="sidebar-close-btn" class="sidebar-close-btn" aria-label="Close Navigation">
+          <i data-lucide="x" style="width: 20px; height: 20px;"></i>
+        </button>
       </div>
     </div>
 
@@ -225,7 +332,7 @@
     <!-- Topbar -->
     <header class="dash-topbar">
       <div style="display: flex; align-items: center; gap: 1rem;">
-        <button id="sidebar-toggle-btn" style="background: none; border: none; cursor: pointer; display: none; color: #15803D;">
+        <button id="sidebar-toggle-btn" class="sidebar-toggle-btn" aria-label="Open Navigation">
           <i data-lucide="menu" style="width: 22px; height: 22px;"></i>
         </button>
         <div>
@@ -453,7 +560,7 @@
                 <i data-lucide="scale" style="width: 18px; height: 18px; color: #B45309;"></i>
                 <span>Recommended Dosage & Quantities (How Much Amount to Use)</span>
               </div>
-              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.85rem;">
+              <div class="dosage-cards-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.85rem;">
                 
                 <div style="background: #F0FDF4; border: 1px solid rgba(34,197,94,0.3); border-radius: 12px; padding: 1rem;">
                   <div style="font-size: 0.78rem; font-weight: 800; color: #15803D; text-transform: uppercase; margin-bottom: 0.3rem;">Fresh Leaf Juice (Swarasa)</div>

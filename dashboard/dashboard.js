@@ -52,6 +52,32 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('profile-name-input').value = user.name || '';
   document.getElementById('profile-email-input').value = user.email || '';
 
+  // Mobile Sidebar Drawer Controller
+  const sidebarToggleBtn = document.getElementById('sidebar-toggle-btn');
+  const sidebarCloseBtn = document.getElementById('sidebar-close-btn');
+  const sidebar = document.getElementById('dash-sidebar');
+  const backdrop = document.getElementById('dash-sidebar-backdrop');
+
+  function openSidebar() {
+    if (sidebar) sidebar.classList.add('mobile-open');
+    if (backdrop) backdrop.classList.add('active');
+  }
+
+  function closeSidebar() {
+    if (sidebar) sidebar.classList.remove('mobile-open');
+    if (backdrop) backdrop.classList.remove('active');
+  }
+
+  if (sidebarToggleBtn) sidebarToggleBtn.addEventListener('click', openSidebar);
+  if (sidebarCloseBtn) sidebarCloseBtn.addEventListener('click', closeSidebar);
+  if (backdrop) backdrop.addEventListener('click', closeSidebar);
+
+  document.querySelectorAll('.dash-nav-item').forEach(item => {
+    item.addEventListener('click', () => {
+      if (window.innerWidth <= 900) closeSidebar();
+    });
+  });
+
   // Setup Sidebar Tab Navigation
   const navItems = document.querySelectorAll('.dash-nav-item[data-tab]');
   navItems.forEach(btn => {
