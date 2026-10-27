@@ -14,5 +14,6 @@ sync_to_atlas.cjs
 update_modal_css.js
 *.backup
 git_tool.cjs
+push_to_github.cjs
 
 
