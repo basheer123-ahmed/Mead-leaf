@@ -101,7 +101,7 @@ body {
 /* Typography Helpers */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
-  color: #FFFFFF;
+  color: #111827;
   line-height: 1.2;
   font-weight: 700;
   letter-spacing: -0.02em;
@@ -173,25 +173,30 @@ img {
 }
 
 .section-tag {
-  color: #E8956A;
+  color: #15803D;
   font-family: var(--font-heading);
   font-size: 0.82rem;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  margin-bottom: 0.6rem;
-  display: block;
+  margin-bottom: 0.75rem;
+  display: inline-block;
+  background: #DCFCE7;
+  padding: 0.35rem 0.9rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(34, 197, 94, 0.3);
 }
 
 .section-title {
   font-size: clamp(2rem, 3.5vw, 2.75rem);
   margin-bottom: 1rem;
-  color: #FFFFFF;
+  color: #111827;
 }
 
 .section-subtitle {
-  font-size: 1.1rem;
-  color: var(--text-secondary);
+  font-size: 1.05rem;
+  color: #4B5563;
+  line-height: 1.6;
 }
 
 /* --- Buttons --- */
@@ -517,12 +522,11 @@ img {
   font-size: clamp(2.6rem, 4.4vw, 3.8rem);
   line-height: 1.12;
   margin: 1.25rem 0;
-  color: #FFFFFF;
+  color: #111827;
 }
 
 .hero-title-highlight {
-  color: #E8956A;
-  text-shadow: 0 0 20px rgba(232, 149, 106, 0.40);
+  color: #15803D;
   position: relative;
   display: inline-block;
 }
@@ -540,9 +544,9 @@ img {
 }
 
 .hero-desc {
-  font-size: 1.125rem;
-  line-height: 1.65;
-  color: var(--text-secondary);
+  font-size: 1.12rem;
+  line-height: 1.68;
+  color: #4B5563;
   margin-bottom: 2rem;
   max-width: 540px;
 }
@@ -1152,8 +1156,9 @@ img {
    4. HOW IT WORKS SECTION
    ========================================================================== */
 .how-section {
-  padding: 6.5rem 0;
+  padding: 5.5rem 0;
   position: relative;
+  background: linear-gradient(180deg, #F9F9F9 0%, #F0FDF4 50%, #F9F9F9 100%);
 }
 
 .steps-grid {
@@ -1164,13 +1169,11 @@ img {
 }
 
 .step-card {
-  background: #14281E;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(80, 160, 110, 0.25);
-  border-radius: var(--radius-lg);
-  padding: 2.3rem 1.75rem;
-  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.35);
+  background: #FFFFFF;
+  border: 1.5px solid rgba(46, 179, 105, 0.22);
+  border-radius: 20px;
+  padding: 2.2rem 1.75rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
   position: relative;
   transition: all var(--transition-normal);
   display: flex;
@@ -1180,45 +1183,45 @@ img {
 
 .step-card:hover {
   transform: translateY(-8px);
-  border-color: rgba(90, 180, 125, 0.55);
-  background: #183326;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 25px rgba(46, 179, 105, 0.25);
+  border-color: #15803D;
+  background: #FFFFFF;
+  box-shadow: 0 16px 36px rgba(22, 101, 52, 0.12);
 }
 
 .step-number-badge {
   font-family: var(--font-heading);
   font-size: 0.95rem;
   font-weight: 800;
-  color: #D4AF37;
-  background: rgba(40, 70, 50, 0.6);
-  width: 48px;
-  height: 48px;
-  border-radius: 14px;
+  color: #15803D;
+  background: #DCFCE7;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 1.5rem;
-  border: 1px solid rgba(212, 175, 55, 0.35);
+  margin-bottom: 1.25rem;
+  border: 1px solid rgba(34, 197, 94, 0.3);
 }
 
 .step-icon-wrap {
-  color: #E29B64;
+  color: #15803D;
   font-size: 1.75rem;
-  margin-bottom: 1.15rem;
+  margin-bottom: 1rem;
   display: inline-flex;
 }
 
 .step-title {
   font-size: 1.25rem;
-  font-weight: 700;
-  color: #FFFFFF;
-  margin-bottom: 0.7rem;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 0.6rem;
 }
 
 .step-desc {
-  font-size: 0.95rem;
-  color: #A3C2B0;
-  line-height: 1.65;
+  font-size: 0.92rem;
+  color: #4B5563;
+  line-height: 1.6;
 }
 
 /* ==========================================================================
@@ -1237,12 +1240,10 @@ img {
 
 .feature-card {
   background: #FFFFFF;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-radius: var(--radius-lg);
-  padding: 2.75rem 2.2rem;
-  border: 1.5px solid rgba(201, 122, 58, 0.25);
-  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.35);
+  border-radius: 20px;
+  padding: 2.2rem 1.85rem;
+  border: 1.5px solid rgba(46, 179, 105, 0.22);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
   transition: all var(--transition-normal);
   display: flex;
   flex-direction: column;
@@ -1250,44 +1251,42 @@ img {
 
 .feature-card:hover {
   transform: translateY(-6px);
-  border-color: #E8956A;
-  background: #FFFFFF;
-  box-shadow: 0 12px 32px rgba(180, 100, 40, 0.18), 0 0 0 1px rgba(201, 122, 58, 0.30) inset;
+  border-color: #15803D;
+  box-shadow: 0 16px 36px rgba(22, 101, 52, 0.12);
 }
 
 .feature-icon-box {
-  width: 62px;
-  height: 62px;
-  border-radius: 16px;
-  background: rgba(201, 122, 58, 0.22);
-  color: #E8956A;
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: #DCFCE7;
+  color: #15803D;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.8rem;
-  margin-bottom: 1.6rem;
-  border: 1.5px solid rgba(201, 122, 58, 0.35);
-  box-shadow: 0 0 18px rgba(232, 149, 106, 0.35);
+  font-size: 1.6rem;
+  margin-bottom: 1.25rem;
+  border: 1px solid rgba(34, 197, 94, 0.3);
   transition: all var(--transition-fast);
 }
 
 .feature-card:hover .feature-icon-box {
-  background: #E8956A;
-  color: #F5E6D3;
-  box-shadow: 0 0 25px #E8956A;
+  background: #15803D;
+  color: #FFFFFF;
+  border-color: #15803D;
 }
 
 .feature-title {
-  font-size: 1.32rem;
-  font-weight: 700;
-  color: #FFFFFF;
-  margin-bottom: 0.85rem;
+  font-size: 1.22rem;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 0.6rem;
 }
 
 .feature-desc {
-  font-size: 0.98rem;
-  color: #6B3F1F;
-  line-height: 1.68;
+  font-size: 0.92rem;
+  color: #4B5563;
+  line-height: 1.6;
 }
 
 /* ==========================================================================
@@ -1306,12 +1305,10 @@ img {
 
 .plant-card {
   background: #FFFFFF;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-radius: var(--radius-lg);
+  border-radius: 20px;
   overflow: hidden;
-  border: 1.5px solid rgba(201, 122, 58, 0.25);
-  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.35);
+  border: 1.5px solid rgba(46, 179, 105, 0.22);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
   transition: all var(--transition-normal);
   display: flex;
   flex-direction: column;
@@ -1319,9 +1316,8 @@ img {
 
 .plant-card:hover {
   transform: translateY(-6px);
-  border-color: #E8956A;
-  background: #FFFFFF;
-  box-shadow: 0 12px 32px rgba(180, 100, 40, 0.18), 0 0 0 1px rgba(201, 122, 58, 0.30) inset;
+  border-color: #15803D;
+  box-shadow: 0 16px 36px rgba(22, 101, 52, 0.12);
 }
 
 .plant-img-wrapper {
@@ -1369,17 +1365,17 @@ img {
 }
 
 .plant-common-name {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #FFFFFF;
+  font-size: 1.22rem;
+  font-weight: 800;
+  color: #111827;
   margin-bottom: 0.25rem;
 }
 
 .plant-sci-name {
   font-style: italic;
-  font-size: 0.9rem;
-  color: #E8956A;
-  font-weight: 500;
+  font-size: 0.88rem;
+  color: #15803D;
+  font-weight: 600;
 }
 
 .plant-card-footer {
