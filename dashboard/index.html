@@ -195,12 +195,15 @@
       display: block;
     }
 
-    @media (max-width: 900px) {
+    @media (max-width: 1024px) {
       .sidebar-toggle-btn {
         display: inline-flex !important;
       }
       .sidebar-close-btn {
         display: inline-flex !important;
+      }
+      .mobile-close-action {
+        display: flex !important;
       }
       .dash-sidebar {
         transform: translateX(-100%) !important;
@@ -281,6 +284,11 @@
 
     <!-- Navigation List -->
     <nav class="dash-nav-group">
+      <!-- Explicit Mobile Close Option -->
+      <button id="sidebar-close-action" class="dash-nav-item mobile-close-action" style="display: none; background: #FEF2F2; color: #DC2626; border: 1.5px solid #FECACA; border-radius: 10px; margin-bottom: 0.85rem; font-weight: 700; align-items: center; gap: 0.5rem; padding: 0.65rem 0.9rem;">
+        <i data-lucide="x-circle" style="width: 20px; height: 20px; color: #DC2626;"></i>
+        <span style="color: #DC2626;">Close Sidebar (Hide Menu)</span>
+      </button>
       <button class="dash-nav-item active" data-tab="tab-overview">
         <i data-lucide="layout-dashboard" style="width: 18px; height: 18px;"></i>
         <span>Overview</span>

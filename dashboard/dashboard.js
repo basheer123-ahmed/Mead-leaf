@@ -70,6 +70,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (sidebarToggleBtn) sidebarToggleBtn.addEventListener('click', openSidebar);
   if (sidebarCloseBtn) sidebarCloseBtn.addEventListener('click', closeSidebar);
+  const sidebarCloseAction = document.getElementById('sidebar-close-action');
+  if (sidebarCloseAction) sidebarCloseAction.addEventListener('click', closeSidebar);
   if (backdrop) backdrop.addEventListener('click', closeSidebar);
 
   document.querySelectorAll('.dash-nav-item').forEach(item => {
