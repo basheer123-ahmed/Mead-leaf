@@ -1,3 +1,37 @@
+
+function compressImageForInference(file, maxWidth = 1024, maxHeight = 1024, quality = 0.85) {
+  return new Promise((resolve) => {
+    if (!file) return resolve(null);
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        let w = img.width;
+        let h = img.height;
+        if (w > maxWidth || h > maxHeight) {
+          if (w > h) {
+            h = Math.round((h * maxWidth) / w);
+            w = maxWidth;
+          } else {
+            w = Math.round((w * maxHeight) / h);
+            h = maxHeight;
+          }
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.onerror = () => resolve(e.target.result);
+      img.src = e.target.result;
+    };
+    reader.onerror = () => resolve(null);
+    reader.readAsDataURL(file);
+  });
+}
+
 /**
  * MEADLEAF - Modern AI Medicinal Plant Identification Platform
  * Interactive Landing Page JavaScript
@@ -225,13 +259,16 @@ document.addEventListener('DOMContentLoaded', () => {
       }, 700);
 
       try {
+        // Compress image before upload so high-res phone photos upload in milliseconds
+        const compressedBase64 = await compressImageForInference(currentFile, 1024, 1024, 0.85);
+
         // Query the live MedLeaf API Server
         const res = await fetch(`${API_BASE}/api/plants/predict`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             fileName: currentFile ? currentFile.name : 'captured_leaf.jpg',
-            image: currentBase64Image
+            image: compressedBase64 || currentBase64Image
           })
         });
         const data = await res.json();

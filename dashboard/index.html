@@ -690,12 +690,19 @@
     }
 
     /* ===================================================================
-       RESPONSIVENESS (MOBILE & TABLET)
+       RESPONSIVENESS (MOBILE, TABLET & DESKTOP COLLAPSE)
        =================================================================== */
-    @media (max-width: 1024px) {
-      .sidebar-toggle-btn {
-        display: inline-flex !important;
-      }
+    .sidebar-toggle-btn {
+      display: inline-flex !important;
+    }
+    .dash-sidebar.collapsed {
+      transform: translateX(-100%) !important;
+    }
+    .dash-main.full-width {
+      margin-left: 0 !important;
+    }
+
+    @media (max-width: 1180px) {
       .sidebar-close-btn {
         display: inline-flex !important;
       }

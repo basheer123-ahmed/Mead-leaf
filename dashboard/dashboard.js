@@ -5,6 +5,41 @@ const API_BASE = (window.location.hostname === 'localhost' || window.location.ho
   : '';
 
 let activeTab = 'tab-overview';
+
+// Universal Image Compression for Instant, Robust Inference across Mobile & Desktop
+window.compressImageForInference = function(file, maxWidth = 1024, maxHeight = 1024, quality = 0.85) {
+  return new Promise((resolve) => {
+    if (!file) return resolve(null);
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        let w = img.width;
+        let h = img.height;
+        if (w > maxWidth || h > maxHeight) {
+          if (w > h) {
+            h = Math.round((h * maxWidth) / w);
+            w = maxWidth;
+          } else {
+            w = Math.round((w * maxHeight) / h);
+            h = maxHeight;
+          }
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.onerror = () => resolve(e.target.result);
+      img.src = e.target.result;
+    };
+    reader.onerror = () => resolve(null);
+    reader.readAsDataURL(file);
+  });
+};
+
 let plantList = [];
 let nutList = [];
 
@@ -52,11 +87,29 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('profile-name-input').value = user.name || '';
   document.getElementById('profile-email-input').value = user.email || '';
 
-  // Mobile Sidebar Drawer Controller
+  // Universal Sidebar & Mobile Drawer Controller
   const sidebarToggleBtn = document.getElementById('sidebar-toggle-btn');
   const sidebarCloseBtn = document.getElementById('sidebar-close-btn');
   const sidebar = document.getElementById('dash-sidebar');
   const backdrop = document.getElementById('dash-sidebar-backdrop');
+  const mainContent = document.querySelector('.dash-main');
+
+  function isMobileViewport() {
+    return window.innerWidth <= 1180 || ('ontouchstart' in window && window.innerWidth <= 1280);
+  }
+
+  function toggleSidebar() {
+    if (isMobileViewport()) {
+      if (sidebar && sidebar.classList.contains('mobile-open')) {
+        closeSidebar();
+      } else {
+        openSidebar();
+      }
+    } else {
+      if (sidebar) sidebar.classList.toggle('collapsed');
+      if (mainContent) mainContent.classList.toggle('full-width');
+    }
+  }
 
   function openSidebar() {
     if (sidebar) sidebar.classList.add('mobile-open');
@@ -64,21 +117,29 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function closeSidebar() {
-    if (sidebar) sidebar.classList.remove('mobile-open');
+    if (sidebar) {
+      sidebar.classList.remove('mobile-open');
+      sidebar.classList.remove('collapsed');
+    }
     if (backdrop) backdrop.classList.remove('active');
+    if (mainContent) mainContent.classList.remove('full-width');
   }
 
-  if (sidebarToggleBtn) sidebarToggleBtn.addEventListener('click', openSidebar);
+  if (sidebarToggleBtn) sidebarToggleBtn.addEventListener('click', toggleSidebar);
   if (sidebarCloseBtn) sidebarCloseBtn.addEventListener('click', closeSidebar);
-  const sidebarCloseAction = document.getElementById('sidebar-close-action');
-  if (sidebarCloseAction) sidebarCloseAction.addEventListener('click', closeSidebar);
   if (backdrop) backdrop.addEventListener('click', closeSidebar);
 
+  // Auto-close drawer on mobile when clicking any navigation link
   document.querySelectorAll('.dash-nav-item').forEach(item => {
     item.addEventListener('click', () => {
-      if (window.innerWidth <= 900) closeSidebar();
+      if (isMobileViewport()) closeSidebar();
     });
   });
+
+  // Ensure closed on mobile touch screen initialization
+  if (isMobileViewport()) {
+    closeSidebar();
+  }
 
   // Setup Sidebar Tab Navigation
   const navItems = document.querySelectorAll('.dash-nav-item[data-tab]');
@@ -261,13 +322,8 @@ window.handleLeafFileSelected = async function(inputEl) {
   if (loadingCard) loadingCard.style.display = 'block';
   if (window.lucide) window.lucide.createIcons();
 
-  // Convert image to base64
-  const base64Data = await new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
+  // Compress image to optimized size (~150KB) for real-time Gemini Vision inference
+  const base64Data = await window.compressImageForInference(file);
 
   try {
     const response = await fetch(`${API_BASE}/api/plants/predict`, {
@@ -939,8 +995,17 @@ window.capturePlantLiveFrame = function() {
   }
 
   const canvas = document.createElement('canvas');
-  const w = videoEl.videoWidth || 640;
-  const h = videoEl.videoHeight || 480;
+  let w = videoEl.videoWidth || 640;
+  let h = videoEl.videoHeight || 480;
+  if (w > 1024 || h > 1024) {
+    if (w > h) {
+      h = Math.round((h * 1024) / w);
+      w = 1024;
+    } else {
+      w = Math.round((w * 1024) / h);
+      h = 1024;
+    }
+  }
   canvas.width = w;
   canvas.height = h;
 
@@ -954,18 +1019,16 @@ window.capturePlantLiveFrame = function() {
     }
     const capturedFile = new File([blob], `live_leaf_scan_${Date.now()}.jpg`, { type: 'image/jpeg' });
     
-    // Stop live stream and close camera zone
     window.stopLiveCamera();
     const cameraZone = document.getElementById('plant-camera-zone');
     if (cameraZone) cameraZone.style.display = 'none';
 
-    // Mock file input object and dispatch to handleLeafFileSelected
     const mockInput = {
       files: [capturedFile],
       value: ''
     };
     window.handleLeafFileSelected(mockInput);
-  }, 'image/jpeg', 0.95);
+  }, 'image/jpeg', 0.85);
 };
 
 window.captureNutLiveFrame = function() {
