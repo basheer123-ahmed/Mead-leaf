@@ -111,6 +111,9 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 window.switchTab = function(tabId) {
+  if (typeof window.stopLiveCamera === 'function') {
+    window.stopLiveCamera();
+  }
   activeTab = tabId;
 
   // Update sidebar active state
@@ -237,6 +240,7 @@ window.handleLeafFileSelected = async function(inputEl) {
   }
 
   const dropZone = document.getElementById('plant-upload-zone');
+  const cameraZone = document.getElementById('plant-camera-zone');
   const loadingCard = document.getElementById('plant-loading-card');
   const loadingThumb = document.getElementById('plant-loading-thumb');
   const resultCard = document.getElementById('plant-scan-result-card');
@@ -252,6 +256,7 @@ window.handleLeafFileSelected = async function(inputEl) {
 
   // Switch to Loading state
   if (dropZone) dropZone.style.display = 'none';
+  if (cameraZone) cameraZone.style.display = 'none';
   if (resultCard) resultCard.style.display = 'none';
   if (loadingCard) loadingCard.style.display = 'block';
   if (window.lucide) window.lucide.createIcons();
@@ -458,6 +463,8 @@ function setupNutScanner() {
     }
   });
 
+  window.handleNutFileSelectedDirect = handleFile;
+
   function handleFile(file) {
     currentSelectedFile = file;
     const objectUrl = URL.createObjectURL(file);
@@ -564,31 +571,53 @@ function setupNutScanner() {
 }
 
 window.resetPlantScanner = function() {
+  if (typeof window.stopLiveCamera === 'function') {
+    window.stopLiveCamera();
+  }
+  const plantModeUpload = document.getElementById('plant-mode-btn-upload');
+  const plantModeCamera = document.getElementById('plant-mode-btn-camera');
+  if (plantModeUpload) plantModeUpload.classList.add('active');
+  if (plantModeCamera) plantModeCamera.classList.remove('active');
+
+  const cameraZone = document.getElementById('plant-camera-zone');
   const dropZone = document.getElementById('plant-upload-zone');
   const previewCard = document.getElementById('plant-preview-card');
   const resultCard = document.getElementById('plant-scan-result-card');
   const loadingCard = document.getElementById('plant-loading-card');
   const fileInput = document.getElementById('plant-file-dash');
 
+  if (cameraZone) cameraZone.style.display = 'none';
   if (dropZone) dropZone.style.display = 'block';
   if (previewCard) previewCard.style.display = 'none';
   if (resultCard) resultCard.style.display = 'none';
   if (loadingCard) loadingCard.style.display = 'none';
   if (fileInput) fileInput.value = '';
+  if (window.lucide) window.lucide.createIcons();
 };
 
 window.resetNutScanner = function() {
+  if (typeof window.stopLiveCamera === 'function') {
+    window.stopLiveCamera();
+  }
+  const nutModeUpload = document.getElementById('nut-mode-btn-upload');
+  const nutModeCamera = document.getElementById('nut-mode-btn-camera');
+  if (nutModeUpload) nutModeUpload.classList.add('active');
+  if (nutModeCamera) nutModeCamera.classList.remove('active');
+
+  const cameraZone = document.getElementById('nut-camera-zone');
   const dropZone = document.getElementById('nut-upload-zone');
   const previewCard = document.getElementById('nut-preview-card');
   const resultCard = document.getElementById('nut-scan-result-card');
   const loadingCard = document.getElementById('nut-loading-card');
   const fileInput = document.getElementById('nut-file-dash');
 
+  if (cameraZone) cameraZone.style.display = 'none';
   if (dropZone) dropZone.style.display = 'block';
   if (previewCard) previewCard.style.display = 'none';
   if (resultCard) resultCard.style.display = 'none';
   if (loadingCard) loadingCard.style.display = 'none';
   if (fileInput) fileInput.value = '';
+  if (window.lucide) window.lucide.createIcons();
 };
 
 window.saveScanToFavorites = function(name, sci) {
@@ -742,3 +771,201 @@ window.processLeafUpload = function(inputEl) {
 };
 
 
+
+
+// ===================================================================
+// MEDLEAF LIVE CAMERA CONTROLLER
+// Real-time WebRTC Viewfinder, Frame Capture, Lens Switching & Native Fallbacks
+// ===================================================================
+
+let activeCameraStream = null;
+let currentFacingMode = 'environment'; // 'environment' (back) or 'user' (front)
+let activeCameraTarget = null; // 'plant' or 'nut'
+
+window.switchPlantScanMode = function(mode) {
+  const uploadBtn = document.getElementById('plant-mode-btn-upload');
+  const cameraBtn = document.getElementById('plant-mode-btn-camera');
+  const uploadZone = document.getElementById('plant-upload-zone');
+  const cameraZone = document.getElementById('plant-camera-zone');
+  const resultCard = document.getElementById('plant-scan-result-card');
+  const loadingCard = document.getElementById('plant-loading-card');
+
+  if (resultCard) resultCard.style.display = 'none';
+  if (loadingCard) loadingCard.style.display = 'none';
+
+  if (mode === 'camera') {
+    if (uploadBtn) uploadBtn.classList.remove('active');
+    if (cameraBtn) cameraBtn.classList.add('active');
+    if (uploadZone) uploadZone.style.display = 'none';
+    if (cameraZone) cameraZone.style.display = 'block';
+    window.startLiveCamera('plant');
+  } else {
+    if (cameraBtn) cameraBtn.classList.remove('active');
+    if (uploadBtn) uploadBtn.classList.add('active');
+    if (cameraZone) cameraZone.style.display = 'none';
+    if (uploadZone) uploadZone.style.display = 'block';
+    window.stopLiveCamera();
+  }
+  if (window.lucide) window.lucide.createIcons();
+};
+
+window.switchNutScanMode = function(mode) {
+  const uploadBtn = document.getElementById('nut-mode-btn-upload');
+  const cameraBtn = document.getElementById('nut-mode-btn-camera');
+  const uploadZone = document.getElementById('nut-upload-zone');
+  const cameraZone = document.getElementById('nut-camera-zone');
+  const previewCard = document.getElementById('nut-preview-card');
+  const resultCard = document.getElementById('nut-scan-result-card');
+  const loadingCard = document.getElementById('nut-loading-card');
+
+  if (previewCard) previewCard.style.display = 'none';
+  if (resultCard) resultCard.style.display = 'none';
+  if (loadingCard) loadingCard.style.display = 'none';
+
+  if (mode === 'camera') {
+    if (uploadBtn) uploadBtn.classList.remove('active');
+    if (cameraBtn) cameraBtn.classList.add('active');
+    if (uploadZone) uploadZone.style.display = 'none';
+    if (cameraZone) cameraZone.style.display = 'block';
+    window.startLiveCamera('nut');
+  } else {
+    if (cameraBtn) cameraBtn.classList.remove('active');
+    if (uploadBtn) uploadBtn.classList.add('active');
+    if (cameraZone) cameraZone.style.display = 'none';
+    if (uploadZone) uploadZone.style.display = 'block';
+    window.stopLiveCamera();
+  }
+  if (window.lucide) window.lucide.createIcons();
+};
+
+window.startLiveCamera = async function(target) {
+  window.stopLiveCamera();
+  activeCameraTarget = target;
+
+  const videoEl = target === 'plant' 
+    ? document.getElementById('plant-live-video') 
+    : document.getElementById('nut-live-video');
+
+  if (!videoEl) return;
+
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    alert('Camera API (getUserMedia) is not supported or blocked by browser permissions. Use the native camera button.');
+    return;
+  }
+
+  const constraints = {
+    video: {
+      facingMode: { ideal: currentFacingMode },
+      width: { ideal: 1280 },
+      height: { ideal: 720 }
+    },
+    audio: false
+  };
+
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia(constraints);
+    activeCameraStream = stream;
+    videoEl.srcObject = stream;
+    await videoEl.play();
+  } catch (err) {
+    console.warn('Camera facingMode request failed, attempting default constraint:', err);
+    try {
+      const fallbackStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+      activeCameraStream = fallbackStream;
+      videoEl.srcObject = fallbackStream;
+      await videoEl.play();
+    } catch (fallbackErr) {
+      console.error('Camera permission or device error:', fallbackErr);
+      alert('Could not open camera stream. Please ensure camera permissions are granted, or tap "Open Native Phone Camera".');
+    }
+  }
+};
+
+window.stopLiveCamera = function() {
+  if (activeCameraStream) {
+    activeCameraStream.getTracks().forEach(track => {
+      try { track.stop(); } catch(e) {}
+    });
+    activeCameraStream = null;
+  }
+  const plantVideo = document.getElementById('plant-live-video');
+  const nutVideo = document.getElementById('nut-live-video');
+  if (plantVideo) plantVideo.srcObject = null;
+  if (nutVideo) nutVideo.srcObject = null;
+};
+
+window.flipCameraFacing = function(target) {
+  currentFacingMode = (currentFacingMode === 'environment') ? 'user' : 'environment';
+  window.startLiveCamera(target || activeCameraTarget || 'plant');
+};
+
+window.capturePlantLiveFrame = function() {
+  const videoEl = document.getElementById('plant-live-video');
+  if (!videoEl || !activeCameraStream) {
+    alert('Live camera is not active. Please click "Live Camera Scanner" first.');
+    return;
+  }
+
+  const canvas = document.createElement('canvas');
+  const w = videoEl.videoWidth || 640;
+  const h = videoEl.videoHeight || 480;
+  canvas.width = w;
+  canvas.height = h;
+
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(videoEl, 0, 0, w, h);
+
+  canvas.toBlob(blob => {
+    if (!blob) {
+      alert('Could not capture frame from camera stream.');
+      return;
+    }
+    const capturedFile = new File([blob], `live_leaf_scan_${Date.now()}.jpg`, { type: 'image/jpeg' });
+    
+    // Stop live stream and close camera zone
+    window.stopLiveCamera();
+    const cameraZone = document.getElementById('plant-camera-zone');
+    if (cameraZone) cameraZone.style.display = 'none';
+
+    // Mock file input object and dispatch to handleLeafFileSelected
+    const mockInput = {
+      files: [capturedFile],
+      value: ''
+    };
+    window.handleLeafFileSelected(mockInput);
+  }, 'image/jpeg', 0.95);
+};
+
+window.captureNutLiveFrame = function() {
+  const videoEl = document.getElementById('nut-live-video');
+  if (!videoEl || !activeCameraStream) {
+    alert('Live camera is not active. Please click "Live Camera Scanner" first.');
+    return;
+  }
+
+  const canvas = document.createElement('canvas');
+  const w = videoEl.videoWidth || 640;
+  const h = videoEl.videoHeight || 480;
+  canvas.width = w;
+  canvas.height = h;
+
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(videoEl, 0, 0, w, h);
+
+  canvas.toBlob(blob => {
+    if (!blob) {
+      alert('Could not capture frame from camera stream.');
+      return;
+    }
+    const capturedFile = new File([blob], `live_nut_scan_${Date.now()}.jpg`, { type: 'image/jpeg' });
+    
+    // Stop live stream and close camera zone
+    window.stopLiveCamera();
+    const cameraZone = document.getElementById('nut-camera-zone');
+    if (cameraZone) cameraZone.style.display = 'none';
+
+    if (typeof window.handleNutFileSelectedDirect === 'function') {
+      window.handleNutFileSelectedDirect(capturedFile);
+    }
+  }, 'image/jpeg', 0.95);
+};

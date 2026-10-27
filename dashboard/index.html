@@ -260,6 +260,159 @@
     }
       .dash-main { margin-left: 0; }
     }
+    /* Mode Toggle Bar */
+    .scan-mode-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.5rem 1.25rem;
+      border-radius: 9px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #4B5563;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .scan-mode-btn.active {
+      background: #FFFFFF;
+      color: #15803D;
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .scan-mode-btn:hover:not(.active) {
+      color: #111827;
+    }
+
+    /* Live Camera Viewfinder & HUD */
+    .camera-viewfinder-container {
+      position: relative;
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #0A140F;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      border: 2px solid rgba(46, 179, 105, 0.4);
+      aspect-ratio: 4 / 3;
+      min-height: 280px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .camera-live-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .camera-hud-overlay {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      right: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      pointer-events: auto;
+      z-index: 5;
+    }
+    .camera-live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(0, 0, 0, 0.65);
+      color: #DCFCE7;
+      padding: 0.35rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      border: 1px solid rgba(46, 179, 105, 0.4);
+      backdrop-filter: blur(4px);
+    }
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #22C55E;
+      box-shadow: 0 0 8px #22C55E;
+      animation: pulseDot 1.4s ease-in-out infinite;
+    }
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+    .camera-tool-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.65);
+      color: #FFFFFF;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s ease;
+      backdrop-filter: blur(4px);
+    }
+    .camera-tool-btn:hover {
+      background: rgba(21, 128, 61, 0.8);
+      border-color: #22C55E;
+    }
+    .camera-frame-guide {
+      position: absolute;
+      top: 14%;
+      left: 14%;
+      right: 14%;
+      bottom: 14%;
+      pointer-events: none;
+      border-radius: 14px;
+      border: 1.5px dashed rgba(255, 255, 255, 0.3);
+      z-index: 4;
+    }
+    .camera-corner {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border-color: #22C55E;
+      border-style: solid;
+      pointer-events: none;
+    }
+    .corner-tl { top: -2px; left: -2px; border-width: 3px 0 0 3px; border-top-left-radius: 12px; }
+    .corner-tr { top: -2px; right: -2px; border-width: 3px 3px 0 0; border-top-right-radius: 12px; }
+    .corner-bl { bottom: -2px; left: -2px; border-width: 0 0 3px 3px; border-bottom-left-radius: 12px; }
+    .corner-br { bottom: -2px; right: -2px; border-width: 0 3px 3px 0; border-bottom-right-radius: 12px; }
+    .camera-guide-text {
+      position: absolute;
+      bottom: -32px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: #E2E8F0;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.9);
+      letter-spacing: 0.02em;
+    }
+    .camera-laser {
+      position: absolute;
+      left: 4%;
+      right: 4%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #22C55E, #86EFAC, #22C55E, transparent);
+      box-shadow: 0 0 10px #22C55E, 0 0 18px rgba(34, 197, 94, 0.8);
+      animation: scanLaser 2.2s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+    @keyframes scanLaser {
+      0% { top: 6%; opacity: 0.3; }
+      50% { opacity: 1; }
+      100% { top: 94%; opacity: 0.3; }
+    }
   </style>
 </head>
 <body>
@@ -504,7 +657,74 @@
               <i data-lucide="leaf" style="width: 26px; height: 26px;"></i>
             </div>
             <h2 style="font-size: 1.8rem; font-weight: 800; color: #111827; margin-bottom: 0.35rem;">Medicinal Leaf Identifier</h2>
-            <p style="color: #6B7280;">Upload a clear photograph of a medicinal leaf to match against 40 Indian medicinal plant varieties.</p>
+            <p style="color: #6B7280;">Upload a photograph or use your live camera to scan medicinal leaves with Gemini Vision AI.</p>
+          </div>
+
+          <!-- Input Mode Switcher: Upload File vs Live Camera -->
+          <div style="display: flex; justify-content: center; margin-bottom: 1.5rem;">
+            <div style="background: #E5E7EB; padding: 4px; border-radius: 12px; display: inline-flex; gap: 4px;">
+              <button type="button" id="plant-mode-btn-upload" class="scan-mode-btn active" onclick="window.switchPlantScanMode('upload')">
+                <i data-lucide="upload-cloud" style="width: 16px; height: 16px;"></i>
+                <span>Upload Photo</span>
+              </button>
+              <button type="button" id="plant-mode-btn-camera" class="scan-mode-btn" onclick="window.switchPlantScanMode('camera')">
+                <i data-lucide="camera" style="width: 16px; height: 16px;"></i>
+                <span>Live Camera Scanner</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Live Camera Viewfinder Zone -->
+          <div id="plant-camera-zone" style="display: none; background: #FFFFFF; border-radius: 20px; border: 1.5px solid rgba(46,179,105,0.3); padding: 1.5rem; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.06); margin-bottom: 1.5rem;">
+            <div class="camera-viewfinder-container">
+              <video id="plant-live-video" class="camera-live-video" autoplay playsinline muted></video>
+              
+              <!-- Camera HUD Overlay -->
+              <div class="camera-hud-overlay">
+                <div class="camera-live-badge">
+                  <span class="live-dot"></span>
+                  <span>LIVE BOTANICAL SCANNER</span>
+                </div>
+                <button type="button" class="camera-tool-btn" onclick="window.flipCameraFacing('plant')" title="Flip Camera Lens">
+                  <i data-lucide="refresh-cw" style="width: 16px; height: 16px;"></i>
+                </button>
+              </div>
+
+              <!-- Reticle Target Box & Laser Beam -->
+              <div class="camera-frame-guide">
+                <div class="camera-laser"></div>
+                <div class="camera-corner corner-tl"></div>
+                <div class="camera-corner corner-tr"></div>
+                <div class="camera-corner corner-bl"></div>
+                <div class="camera-corner corner-br"></div>
+                <div class="camera-guide-text">Position leaf clearly inside frame</div>
+              </div>
+            </div>
+
+            <!-- Camera Controls Bar -->
+            <div style="margin-top: 1.5rem; display: flex; align-items: center; justify-content: center; gap: 0.85rem; flex-wrap: wrap;">
+              <button type="button" class="btn btn-secondary" onclick="window.switchPlantScanMode('upload')" style="display: flex; align-items: center; gap: 0.5rem; font-weight: 600;">
+                <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+                <span>Close Camera</span>
+              </button>
+              <button type="button" class="btn btn-primary" onclick="window.capturePlantLiveFrame()" style="display: flex; align-items: center; gap: 0.6rem; font-weight: 700; background: #15803D; border-color: #15803D; padding: 0.85rem 1.75rem; font-size: 1.05rem; box-shadow: 0 4px 15px rgba(21, 128, 61, 0.3);">
+                <i data-lucide="camera" style="width: 22px; height: 22px;"></i>
+                <span>Capture & Identify</span>
+              </button>
+              <button type="button" class="btn btn-secondary" onclick="window.flipCameraFacing('plant')" style="display: flex; align-items: center; gap: 0.5rem; font-weight: 600;">
+                <i data-lucide="switch-camera" style="width: 18px; height: 18px;"></i>
+                <span>Flip Lens</span>
+              </button>
+            </div>
+
+            <!-- Native Camera Fallback option -->
+            <div style="margin-top: 1rem; font-size: 0.82rem; color: #6B7280;">
+              <span>Having trouble with live video?</span>
+              <button type="button" onclick="document.getElementById('plant-camera-native-dash').click()" style="background: none; border: none; color: #15803D; font-weight: 700; text-decoration: underline; cursor: pointer; margin-left: 0.25rem;">
+                Open Native Phone Camera
+              </button>
+              <input type="file" id="plant-camera-native-dash" accept="image/*" capture="environment" style="display: none;" onchange="window.handleLeafFileSelected(this)" />
+            </div>
           </div>
 
           <!-- Upload Zone with Drag-and-Drop & Direct Click -->
@@ -644,7 +864,74 @@
               <i data-lucide="layers" style="width: 26px; height: 26px;"></i>
             </div>
             <h2 style="font-size: 1.8rem; font-weight: 800; color: #111827; margin-bottom: 0.35rem;">Nut & Dry Fruit Classifier</h2>
-            <p style="color: #6B7280;">Identify tree nuts and examine nutritional profiles using the active MobileNet CNN model.</p>
+            <p style="color: #6B7280;">Upload a photograph or use live camera to classify tree nuts with the active MobileNet CNN model.</p>
+          </div>
+
+          <!-- Input Mode Switcher: Upload File vs Live Camera -->
+          <div style="display: flex; justify-content: center; margin-bottom: 1.5rem;">
+            <div style="background: #E5E7EB; padding: 4px; border-radius: 12px; display: inline-flex; gap: 4px;">
+              <button type="button" id="nut-mode-btn-upload" class="scan-mode-btn active" onclick="window.switchNutScanMode('upload')">
+                <i data-lucide="upload-cloud" style="width: 16px; height: 16px;"></i>
+                <span>Upload Photo</span>
+              </button>
+              <button type="button" id="nut-mode-btn-camera" class="scan-mode-btn" onclick="window.switchNutScanMode('camera')">
+                <i data-lucide="camera" style="width: 16px; height: 16px;"></i>
+                <span>Live Camera Scanner</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Live Camera Viewfinder Zone for Nuts -->
+          <div id="nut-camera-zone" style="display: none; background: #FFFFFF; border-radius: 20px; border: 1.5px solid rgba(201,122,58,0.3); padding: 1.5rem; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.06); margin-bottom: 1.5rem;">
+            <div class="camera-viewfinder-container" style="border-color: rgba(201,122,58,0.5);">
+              <video id="nut-live-video" class="camera-live-video" autoplay playsinline muted></video>
+              
+              <!-- Camera HUD Overlay -->
+              <div class="camera-hud-overlay">
+                <div class="camera-live-badge" style="background: rgba(0, 0, 0, 0.65); color: #FEF3C7; border-color: rgba(201,122,58,0.5);">
+                  <span class="live-dot" style="background: #F59E0B; box-shadow: 0 0 8px #F59E0B;"></span>
+                  <span>LIVE NUT SCANNER</span>
+                </div>
+                <button type="button" class="camera-tool-btn" onclick="window.flipCameraFacing('nut')" title="Flip Camera Lens">
+                  <i data-lucide="refresh-cw" style="width: 16px; height: 16px;"></i>
+                </button>
+              </div>
+
+              <!-- Reticle Target Box & Laser Beam -->
+              <div class="camera-frame-guide">
+                <div class="camera-laser" style="background: linear-gradient(90deg, transparent, #F59E0B, #FDE68A, #F59E0B, transparent); box-shadow: 0 0 10px #F59E0B, 0 0 18px rgba(245, 158, 11, 0.8);"></div>
+                <div class="camera-corner corner-tl" style="border-color: #F59E0B;"></div>
+                <div class="camera-corner corner-tr" style="border-color: #F59E0B;"></div>
+                <div class="camera-corner corner-bl" style="border-color: #F59E0B;"></div>
+                <div class="camera-corner corner-br" style="border-color: #F59E0B;"></div>
+                <div class="camera-guide-text">Position nut specimen clearly inside frame</div>
+              </div>
+            </div>
+
+            <!-- Camera Controls Bar -->
+            <div style="margin-top: 1.5rem; display: flex; align-items: center; justify-content: center; gap: 0.85rem; flex-wrap: wrap;">
+              <button type="button" class="btn btn-secondary" onclick="window.switchNutScanMode('upload')" style="display: flex; align-items: center; gap: 0.5rem; font-weight: 600;">
+                <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+                <span>Close Camera</span>
+              </button>
+              <button type="button" class="btn btn-primary" onclick="window.captureNutLiveFrame()" style="display: flex; align-items: center; gap: 0.6rem; font-weight: 700; background: #C97A3A; border-color: #C97A3A; padding: 0.85rem 1.75rem; font-size: 1.05rem; box-shadow: 0 4px 15px rgba(201, 122, 58, 0.3);">
+                <i data-lucide="camera" style="width: 22px; height: 22px;"></i>
+                <span>Capture & Identify</span>
+              </button>
+              <button type="button" class="btn btn-secondary" onclick="window.flipCameraFacing('nut')" style="display: flex; align-items: center; gap: 0.5rem; font-weight: 600;">
+                <i data-lucide="switch-camera" style="width: 18px; height: 18px;"></i>
+                <span>Flip Lens</span>
+              </button>
+            </div>
+
+            <!-- Native Camera Fallback option -->
+            <div style="margin-top: 1rem; font-size: 0.82rem; color: #6B7280;">
+              <span>Having trouble with live video?</span>
+              <button type="button" onclick="document.getElementById('nut-camera-native-dash').click()" style="background: none; border: none; color: #C97A3A; font-weight: 700; text-decoration: underline; cursor: pointer; margin-left: 0.25rem;">
+                Open Native Phone Camera
+              </button>
+              <input type="file" id="nut-camera-native-dash" accept="image/*" capture="environment" style="display: none;" onchange="window.handleNutFileSelectedDirect(this.files[0])" />
+            </div>
           </div>
 
           <div id="nut-upload-zone" style="background: #FFFFFF; border: 2px dashed rgba(201,122,58,0.4); border-radius: 20px; padding: 3rem 2rem; text-align: center; cursor: pointer;">
