@@ -1,7 +1,5 @@
-export default function handler(req, res) {
-  res.status(200).json({
-    status: 'ok',
-    message: 'Meadleaf API Server is healthy',
-    timestamp: new Date().toISOString()
-  });
+import handleRequest from '../server/api_server.js';
+
+export default async function handler(req, res) {
+  return handleRequest(req, res);
 }

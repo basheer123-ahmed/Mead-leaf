@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MedLeaf AI - Botanical Dashboard & Research Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="../css/styles.css?v=1793126180" />
+  <style>
+    :root {
+      --sidebar-width: 260px;
+    }
+    body {
+      background-color: #F8FAF9;
+      color: #1A2E22;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      min-height: 100vh;
+      font-family: 'Inter', sans-serif;
+    }
+    /* Dashboard Sidebar */
+    .dash-sidebar {
+      width: var(--sidebar-width);
+      background: #FFFFFF;
+      border-right: 1.5px solid rgba(46, 179, 105, 0.15);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 100;
+      transition: transform 0.3s ease;
+    }
+    .dash-sidebar-header {
+      padding: 1.5rem 1.25rem;
+      border-bottom: 1px solid rgba(46, 179, 105, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .dash-brand-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #15803D, #166534);
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .dash-nav-group {
+      padding: 1.25rem 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      flex: 1;
+      overflow-y: auto;
+    }
+    .dash-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      color: #4A6B56;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+    }
+    .dash-nav-item:hover, .dash-nav-item.active {
+      background: #EBF7F0;
+      color: #15803D;
+    }
+    .dash-nav-item.active {
+      font-weight: 700;
+    }
+    /* Main Content Area */
+    .dash-main {
+      margin-left: var(--sidebar-width);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+    .dash-topbar {
+      height: 70px;
+      background: #FFFFFF;
+      border-bottom: 1.5px solid rgba(46, 179, 105, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 90;
+    }
+    .dash-content {
+      padding: 2.25rem 2.5rem;
+      flex: 1;
+    }
+    .tab-pane {
+      display: none;
+    }
+    .tab-pane.active {
+      display: block;
+      animation: fadeIn 0.25s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    /* Cards */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .kpi-card {
+      background: #FFFFFF;
+      padding: 1.5rem;
+      border-radius: 16px;
+      border: 1.5px solid rgba(46, 179, 105, 0.15);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    }
+    .pill-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+    .pill-green {
+      background: #DCFCE7;
+      color: #15803D;
+    }
+    .pill-amber {
+      background: #FEF3C7;
+      color: #B45309;
+    }
+    @media (max-width: 900px) {
+      .dash-sidebar { transform: translateX(-100%); }
+      .dash-sidebar.mobile-open { transform: translateX(0); }
+      .dash-main { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Left Sidebar Navigation -->
+  <aside class="dash-sidebar" id="dash-sidebar">
+    <div class="dash-sidebar-header">
+      <div class="dash-brand-icon">
+        <i data-lucide="leaf" style="width: 20px; height: 20px;"></i>
+      </div>
+      <div>
+        <div style="font-weight: 800; font-size: 1.15rem; color: #15803D; letter-spacing: -0.02em;">MedLeaf AI</div>
+        <div style="font-size: 0.72rem; color: #6B7280; text-transform: uppercase; font-weight: 600;">Botanical System</div>
+      </div>
+    </div>
+
+    <!-- Navigation List -->
+    <nav class="dash-nav-group">
+      <button class="dash-nav-item active" data-tab="tab-overview">
+        <i data-lucide="layout-dashboard" style="width: 18px; height: 18px;"></i>
+        <span>Overview</span>
+      </button>
+      <button class="dash-nav-item" data-tab="tab-plant-scan">
+        <i data-lucide="scan" style="width: 18px; height: 18px;"></i>
+        <span>Identify Plants</span>
+      </button>
+      <button class="dash-nav-item" data-tab="tab-nut-scan">
+        <i data-lucide="nut" style="width: 18px; height: 18px;"></i>
+        <span>Identify Nuts & Fruits</span>
+      </button>
+      <button class="dash-nav-item" data-tab="tab-explore-plants">
+        <i data-lucide="sprout" style="width: 18px; height: 18px;"></i>
+        <span>Explore Plants</span>
+      </button>
+      <button class="dash-nav-item" data-tab="tab-explore-nuts">
+        <i data-lucide="layers" style="width: 18px; height: 18px;"></i>
+        <span>Explore Nuts</span>
+      </button>
+      <button class="dash-nav-item" data-tab="tab-history">
+        <i data-lucide="history" style="width: 18px; height: 18px;"></i>
+        <span>Scan History</span>
+      </button>
+      <button class="dash-nav-item" data-tab="tab-favorites">
+        <i data-lucide="heart" style="width: 18px; height: 18px;"></i>
+        <span>Favorites</span>
+      </button>
+      <button class="dash-nav-item" data-tab="tab-profile">
+        <i data-lucide="user" style="width: 18px; height: 18px;"></i>
+        <span>My Profile</span>
+      </button>
+
+      <div style="margin-top: auto; padding-top: 1rem; border-top: 1px solid rgba(46, 179, 105, 0.1);">
+        <a href="/" class="dash-nav-item" style="color: #4B5563;">
+          <i data-lucide="arrow-left" style="width: 18px; height: 18px;"></i>
+          <span>Back to Landing</span>
+        </a>
+        <button class="dash-nav-item" id="dash-logout-btn" style="color: #DC2626;">
+          <i data-lucide="log-out" style="width: 18px; height: 18px;"></i>
+          <span>Sign Out</span>
+        </button>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- Main Application Area -->
+  <main class="dash-main">
+    <!-- Topbar -->
+    <header class="dash-topbar">
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <button id="sidebar-toggle-btn" style="background: none; border: none; cursor: pointer; display: none; color: #15803D;">
+          <i data-lucide="menu" style="width: 22px; height: 22px;"></i>
+        </button>
+        <div>
+          <div style="font-weight: 700; font-size: 1.15rem; color: #1A2E22;" id="dash-page-title">Dashboard Overview</div>
+          <div style="font-size: 0.78rem; color: #6B7280;" id="dash-breadcrumb">MedLeaf AI / Research Dashboard</div>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 1.25rem;">
+        <div style="display: flex; align-items: center; gap: 0.65rem; background: #F0FDF4; border: 1px solid rgba(46,179,105,0.25); padding: 0.4rem 0.85rem; border-radius: 9999px;">
+          <div style="width: 28px; height: 28px; border-radius: 50%; background: #15803D; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem;">
+            <span id="user-avatar-initial">B</span>
+          </div>
+          <div>
+            <div style="font-size: 0.82rem; font-weight: 700; color: #15803D;" id="dash-user-name">Botanist User</div>
+            <div style="font-size: 0.7rem; color: #4B5563;" id="dash-user-role">Research Member</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content Pages Container -->
+    <div class="dash-content">
+
+      <!-- ===================================================================
+           TAB 1: OVERVIEW
+           =================================================================== -->
+      <section class="tab-pane active" id="tab-overview">
+        <!-- Welcome Hero Banner -->
+        <div style="background: linear-gradient(135deg, #15803D 0%, #0F5132 100%); color: #FFFFFF; padding: 2.25rem; border-radius: 20px; margin-bottom: 2rem; box-shadow: 0 10px 30px rgba(21, 128, 61, 0.18);">
+          <span class="pill-status" style="background: rgba(255, 255, 255, 0.2); color: #FFFFFF; margin-bottom: 0.75rem;">
+            <i data-lucide="sparkles" style="width: 14px; height: 14px;"></i>
+            <span>AI Recognition Active</span>
+          </span>
+          <h1 style="font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; font-family: 'Plus Jakarta Sans', sans-serif;">
+            Welcome back, <span id="welcome-user-name">Botanist</span>!
+          </h1>
+          <p style="font-size: 1rem; color: #D1FAE5; margin-bottom: 1.5rem; max-width: 600px;">
+            Discover, identify, and learn about medicinal plants, botanical specimens, and natural superfoods powered by verified deep learning models.
+          </p>
+          <div style="display: flex; gap: 0.85rem; flex-wrap: wrap;">
+            <button class="btn btn-primary" onclick="switchTab('tab-plant-scan')" style="background: #FFFFFF; color: #15803D; font-weight: 700; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+              <i data-lucide="leaf" style="width: 18px; height: 18px;"></i>
+              <span>Identify a Plant</span>
+            </button>
+            <button class="btn btn-secondary" onclick="switchTab('tab-nut-scan')" style="background: rgba(255,255,255,0.15); color: #FFFFFF; border-color: rgba(255,255,255,0.3);">
+              <i data-lucide="layers" style="width: 18px; height: 18px;"></i>
+              <span>Identify Nuts & Dry Fruits</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 4 KPI Cards -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem;">
+              <span style="font-size: 0.8rem; font-weight: 700; color: #6B7280; text-transform: uppercase;">Total Scans</span>
+              <div style="width: 36px; height: 36px; border-radius: 8px; background: #EBF7F0; color: #15803D; display: flex; align-items: center; justify-content: center;">
+                <i data-lucide="scan-line" style="width: 18px; height: 18px;"></i>
+              </div>
+            </div>
+            <div style="font-size: 2.2rem; font-weight: 800; color: #111827;" id="dash-total-scans">24</div>
+            <div style="font-size: 0.8rem; color: #15803D; margin-top: 0.25rem;">+6 scans this week</div>
+          </div>
+
+          <div class="kpi-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem;">
+              <span style="font-size: 0.8rem; font-weight: 700; color: #6B7280; text-transform: uppercase;">Medicinal Species</span>
+              <div style="width: 36px; height: 36px; border-radius: 8px; background: #DCFCE7; color: #15803D; display: flex; align-items: center; justify-content: center;">
+                <i data-lucide="sprout" style="width: 18px; height: 18px;"></i>
+              </div>
+            </div>
+            <div style="font-size: 2.2rem; font-weight: 800; color: #111827;">164</div>
+            <div style="font-size: 0.8rem; color: #4B5563; margin-top: 0.25rem;">3,668 dataset specimens</div>
+          </div>
+
+          <div class="kpi-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem;">
+              <span style="font-size: 0.8rem; font-weight: 700; color: #6B7280; text-transform: uppercase;">Nut & Fruit Classes</span>
+              <div style="width: 36px; height: 36px; border-radius: 8px; background: #FEF3C7; color: #B45309; display: flex; align-items: center; justify-content: center;">
+                <i data-lucide="layers" style="width: 18px; height: 18px;"></i>
+              </div>
+            </div>
+            <div style="font-size: 2.2rem; font-weight: 800; color: #111827;">10</div>
+            <div style="font-size: 0.8rem; color: #B45309; margin-top: 0.25rem;">100% F1 MobileNet model</div>
+          </div>
+
+          <div class="kpi-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem;">
+              <span style="font-size: 0.8rem; font-weight: 700; color: #6B7280; text-transform: uppercase;">Saved Favorites</span>
+              <div style="width: 36px; height: 36px; border-radius: 8px; background: #FFE4E6; color: #E11D48; display: flex; align-items: center; justify-content: center;">
+                <i data-lucide="heart" style="width: 18px; height: 18px;"></i>
+              </div>
+            </div>
+            <div style="font-size: 2.2rem; font-weight: 800; color: #111827;" id="dash-favs-count">8</div>
+            <div style="font-size: 0.8rem; color: #E11D48; margin-top: 0.25rem;">Accessible in favorites tab</div>
+          </div>
+        </div>
+
+        <!-- Recent Activity Section -->
+        <div style="background: #FFFFFF; border-radius: 16px; border: 1.5px solid rgba(46,179,105,0.15); padding: 1.75rem; margin-bottom: 2rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+            <div style="font-weight: 700; font-size: 1.1rem; color: #111827;">Recent AI Recognition Stream</div>
+            <button onclick="switchTab('tab-history')" style="background: none; border: none; color: #15803D; font-weight: 600; font-size: 0.85rem; cursor: pointer;">View All Scans ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢</button>
+          </div>
+
+          <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+              <thead>
+                <tr style="border-bottom: 1px solid #E5E7EB; color: #6B7280; font-size: 0.78rem; text-transform: uppercase;">
+                  <th style="padding: 0.75rem 0.5rem;">Specimen</th>
+                  <th style="padding: 0.75rem 0.5rem;">Predicted Class</th>
+                  <th style="padding: 0.75rem 0.5rem;">Category</th>
+                  <th style="padding: 0.75rem 0.5rem;">Confidence</th>
+                  <th style="padding: 0.75rem 0.5rem;">Date & Time</th>
+                  <th style="padding: 0.75rem 0.5rem; text-align: right;">Action</th>
+                </tr>
+              </thead>
+              <tbody id="overview-recent-table" style="color: #374151;">
+                <tr style="border-bottom: 1px solid #F3F4F6;">
+                  <td style="padding: 0.75rem 0.5rem;">
+                    <div style="width: 38px; height: 38px; border-radius: 8px; background: #DCFCE7; display: flex; align-items: center; justify-content: center; color: #15803D;">
+                      <i data-lucide="leaf" style="width: 18px; height: 18px;"></i>
+                    </div>
+                  </td>
+                  <td style="padding: 0.75rem 0.5rem; font-weight: 700; color: #111827;">Tulsi (Ocimum sanctum)</td>
+                  <td style="padding: 0.75rem 0.5rem;"><span class="pill-status pill-green">Medicinal Leaf</span></td>
+                  <td style="padding: 0.75rem 0.5rem; font-weight: 700; color: #15803D;">98.4%</td>
+                  <td style="padding: 0.75rem 0.5rem; color: #6B7280; font-size: 0.82rem;">Today, 12:35 PM</td>
+                  <td style="padding: 0.75rem 0.5rem; text-align: right;">
+                    <button class="btn btn-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.8rem; background: #F9FAFB;">View</button>
+                  </td>
+                </tr>
+                <tr style="border-bottom: 1px solid #F3F4F6;">
+                  <td style="padding: 0.75rem 0.5rem;">
+                    <div style="width: 38px; height: 38px; border-radius: 8px; background: #FEF3C7; display: flex; align-items: center; justify-content: center; color: #B45309;">
+                      <i data-lucide="layers" style="width: 18px; height: 18px;"></i>
+                    </div>
+                  </td>
+                  <td style="padding: 0.75rem 0.5rem; font-weight: 700; color: #111827;">Almond (Prunus dulcis)</td>
+                  <td style="padding: 0.75rem 0.5rem;"><span class="pill-status pill-amber">Tree Nut</span></td>
+                  <td style="padding: 0.75rem 0.5rem; font-weight: 700; color: #15803D;">99.1%</td>
+                  <td style="padding: 0.75rem 0.5rem; color: #6B7280; font-size: 0.82rem;">Yesterday, 04:15 PM</td>
+                  <td style="padding: 0.75rem 0.5rem; text-align: right;">
+                    <button class="btn btn-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.8rem; background: #F9FAFB;">View</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           TAB 2: IDENTIFY MEDICINAL PLANTS
+           =================================================================== -->
+      <section class="tab-pane" id="tab-plant-scan">
+        <div style="max-width: 780px; margin: 0 auto;">
+          <div style="text-align: center; margin-bottom: 2rem;">
+            <div style="width: 52px; height: 52px; border-radius: 14px; background: #DCFCE7; color: #15803D; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 0.75rem;">
+              <i data-lucide="leaf" style="width: 26px; height: 26px;"></i>
+            </div>
+            <h2 style="font-size: 1.8rem; font-weight: 800; color: #111827; margin-bottom: 0.35rem;">Medicinal Leaf Identifier</h2>
+            <p style="color: #6B7280;">Upload a clear photograph of a medicinal leaf to match against 40 Indian medicinal plant varieties.</p>
+          </div>
+
+          <!-- Upload Zone with Drag-and-Drop & Direct Click -->
+          <div id="plant-upload-zone" onclick="document.getElementById('plant-file-dash').click()" style="display: block; background: #FFFFFF; border: 2.5px dashed rgba(46,179,105,0.5); border-radius: 20px; padding: 3rem 2rem; text-align: center; cursor: pointer; transition: all 0.2s ease;">
+            <input type="file" id="plant-file-dash" accept="image/*" style="display: none;" onchange="window.handleLeafFileSelected(this)" />
+            <div style="width: 64px; height: 64px; border-radius: 50%; background: #EBF7F0; color: #15803D; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem;">
+              <i data-lucide="upload-cloud" style="width: 32px; height: 32px;"></i>
+            </div>
+            <div style="font-weight: 700; font-size: 1.2rem; color: #1F2937; margin-bottom: 0.35rem;">Choose leaf photo or drop here</div>
+            <div style="font-size: 0.85rem; color: #6B7280; margin-bottom: 1.25rem;">JPEG, PNG, WEBP (Max 15MB) • Instant Auto-Analysis</div>
+            <button type="button" class="btn btn-primary" onclick="event.stopPropagation(); document.getElementById('plant-file-dash').click();" style="font-weight: 700; background: #15803D; border-color: #15803D; cursor: pointer;">
+              Select Leaf File
+            </button>
+          </div>
+
+          <!-- Loading Progress State (Shows immediately with selected image preview) -->
+          <div id="plant-loading-card" style="display: none; background: #FFFFFF; border-radius: 20px; border: 1.5px solid rgba(46,179,105,0.3); padding: 2rem; text-align: center; margin-top: 1.5rem; box-shadow: 0 10px 25px rgba(0,0,0,0.05);">
+            <img id="plant-loading-thumb" src="" alt="Specimen Preview" style="width: 110px; height: 110px; object-fit: cover; border-radius: 12px; border: 2px solid #15803D; margin: 0 auto 1.25rem; display: block; box-shadow: 0 4px 12px rgba(0,0,0,0.1);" />
+            <div style="width: 44px; height: 44px; border: 4px solid #EBF7F0; border-top-color: #15803D; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 1rem;"></div>
+            <h4 style="font-size: 1.25rem; font-weight: 800; color: #111827; margin-bottom: 0.35rem;">Analyzing Specimen with Gemini Vision AI...</h4>
+            <p id="plant-loading-text" style="color: #6B7280; font-size: 0.9rem; max-width: 500px; margin: 0 auto;">Identifying botanical taxonomy, clinical medical uses, and therapeutic dosages...</p>
+            <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
+          </div>
+
+          <!-- Comprehensive Botanical & Medical Report Card -->
+          <div id="plant-scan-result-card" style="display: none; background: #FFFFFF; border-radius: 20px; border: 1.5px solid rgba(46,179,105,0.3); padding: 2rem; margin-top: 1.5rem; box-shadow: 0 12px 35px rgba(0,0,0,0.08);">
+            
+            <!-- Header Specimen Section -->
+            <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: center; margin-bottom: 1.5rem; padding-bottom: 1.25rem; border-bottom: 1px solid #E5E7EB;">
+              <img id="plant-preview-img" src="" alt="Scanned Leaf" style="width: 140px; height: 140px; object-fit: cover; border-radius: 14px; border: 2px solid #15803D; box-shadow: 0 6px 15px rgba(0,0,0,0.1);" />
+              <div style="flex: 1; min-width: 250px;">
+                <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.4rem; flex-wrap: wrap;">
+                  <span class="pill-status pill-green">Verified Botanical Match</span>
+                  <span id="plant-result-engine" class="pill-status" style="background: #E0E7FF; color: #3730A3;">Google Gemini 3.5 Flash Vision</span>
+                </div>
+                <h3 id="plant-result-name" style="font-size: 1.85rem; font-weight: 800; color: #111827; margin-bottom: 0.2rem;">Tulsi (Holy Basil)</h3>
+                <div id="plant-result-sci" style="font-style: italic; color: #15803D; font-weight: 700; font-size: 1.1rem; margin-bottom: 0.35rem;">Ocimum sanctum</div>
+                <div id="plant-result-family" style="font-size: 0.88rem; color: #6B7280; font-weight: 600; margin-bottom: 0.35rem;">Family: Lamiaceae (Mint Family)</div>
+                <div id="plant-result-local" style="font-size: 0.88rem; color: #4B5563; margin-bottom: 0.5rem;">Regional Names: Hindi: Tulsi, Telugu: Tulasi, Tamil: Thulasi</div>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                  <span style="font-size: 0.85rem; color: #6B7280; font-weight: 600;">Confidence Match:</span>
+                  <span id="plant-result-conf" style="font-weight: 800; color: #15803D; font-size: 1.25rem;">98.4%</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 1. Clinical Conditions & Diseases Treated -->
+            <div style="margin-bottom: 1.5rem;">
+              <div style="font-weight: 800; color: #111827; font-size: 1rem; margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.4rem;">
+                <i data-lucide="activity" style="width: 18px; height: 18px; color: #15803D;"></i>
+                <span>Medicinal Uses & Diseases Treated</span>
+              </div>
+              <div id="plant-result-conditions" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                <!-- Filled dynamically -->
+              </div>
+            </div>
+
+            <!-- 2. Exact Dosage & Quantities ("How Much Amount") -->
+            <div style="margin-bottom: 1.5rem;">
+              <div style="font-weight: 800; color: #111827; font-size: 1rem; margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.4rem;">
+                <i data-lucide="scale" style="width: 18px; height: 18px; color: #B45309;"></i>
+                <span>Recommended Dosage & Quantities (How Much Amount to Use)</span>
+              </div>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.85rem;">
+                
+                <div style="background: #F0FDF4; border: 1px solid rgba(34,197,94,0.3); border-radius: 12px; padding: 1rem;">
+                  <div style="font-size: 0.78rem; font-weight: 800; color: #15803D; text-transform: uppercase; margin-bottom: 0.3rem;">Fresh Leaf Juice (Swarasa)</div>
+                  <div id="dose-juice" style="font-size: 0.9rem; font-weight: 600; color: #166534; line-height: 1.4;">5 - 10 ml once daily in the morning</div>
+                </div>
+
+                <div style="background: #FEF3C7; border: 1px solid rgba(245,158,11,0.3); border-radius: 12px; padding: 1rem;">
+                  <div style="font-size: 0.78rem; font-weight: 800; color: #B45309; text-transform: uppercase; margin-bottom: 0.3rem;">Herbal Tea / Decoction (Kwath)</div>
+                  <div id="dose-tea" style="font-size: 0.9rem; font-weight: 600; color: #78350F; line-height: 1.4;">30 - 50 ml boiled from 5-8 leaves</div>
+                </div>
+
+                <div style="background: #EFF6FF; border: 1px solid rgba(59,130,246,0.3); border-radius: 12px; padding: 1rem;">
+                  <div style="font-size: 0.78rem; font-weight: 800; color: #1D4ED8; text-transform: uppercase; margin-bottom: 0.3rem;">Dried Leaf Powder (Churna)</div>
+                  <div id="dose-powder" style="font-size: 0.9rem; font-weight: 600; color: #1E40AF; line-height: 1.4;">2 - 3 grams with warm water twice daily</div>
+                </div>
+
+                <div style="background: #FAF5FF; border: 1px solid rgba(168,85,247,0.3); border-radius: 12px; padding: 1rem;">
+                  <div style="font-size: 0.78rem; font-weight: 800; color: #7E22CE; text-transform: uppercase; margin-bottom: 0.3rem;">External Application (Lepa)</div>
+                  <div id="dose-topical" style="font-size: 0.9rem; font-weight: 600; color: #581C87; line-height: 1.4;">Apply fresh crushed paste for 20 minutes</div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- 3. Bioactive Chemical Compounds -->
+            <div style="margin-bottom: 1.5rem;">
+              <div style="font-weight: 800; color: #111827; font-size: 1rem; margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.4rem;">
+                <i data-lucide="dna" style="width: 18px; height: 18px; color: #0284C7;"></i>
+                <span>Active Bioactive Phytochemicals</span>
+              </div>
+              <div id="plant-result-compounds" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                <!-- Filled dynamically -->
+              </div>
+            </div>
+
+            <!-- 4. Preparation Method & Traditional Uses -->
+            <div style="background: #F8FAF9; padding: 1.25rem; border-radius: 14px; border: 1px solid rgba(46,179,105,0.2); margin-bottom: 1.25rem;">
+              <div style="font-weight: 800; color: #15803D; font-size: 0.95rem; margin-bottom: 0.4rem;">Preparation Method & Traditional Uses</div>
+              <p id="plant-result-desc" style="font-size: 0.9rem; color: #374151; line-height: 1.6; margin: 0;"></p>
+            </div>
+
+            <!-- 5. Precautions, Side Effects & Toxicity -->
+            <div style="background: #FFFBEB; padding: 1.15rem; border-radius: 14px; border: 1px solid rgba(245,158,11,0.3); margin-bottom: 1.5rem;">
+              <div style="display: flex; align-items: center; gap: 0.4rem; color: #B45309; font-weight: 800; font-size: 0.9rem; margin-bottom: 0.3rem;">
+                <i data-lucide="shield-alert" style="width: 18px; height: 18px;"></i>
+                <span>Precautions, Contraindications & Safe Use</span>
+              </div>
+              <div id="plant-result-precautions" style="font-size: 0.88rem; color: #92400E; line-height: 1.5;"></div>
+            </div>
+
+            <!-- Actions Footer -->
+            <div style="display: flex; justify-content: flex-end; gap: 0.75rem; flex-wrap: wrap;">
+              <button class="btn btn-secondary" id="dash-save-fav-btn" onclick="saveCurrentIdentifiedPlant()">
+                <i data-lucide="heart" style="width: 16px; height: 16px; color: #E11D48;"></i>
+                <span>Save to Favorites</span>
+              </button>
+              <button class="btn btn-primary" onclick="resetPlantScanner()">
+                <i data-lucide="refresh-cw" style="width: 16px; height: 16px;"></i>
+                <span>Scan Another Leaf</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           TAB 3: IDENTIFY NUTS & DRY FRUITS
+           =================================================================== -->
+      <section class="tab-pane" id="tab-nut-scan">
+        <div style="max-width: 780px; margin: 0 auto;">
+          <div style="text-align: center; margin-bottom: 2rem;">
+            <div style="width: 52px; height: 52px; border-radius: 14px; background: #FEF3C7; color: #B45309; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 0.75rem;">
+              <i data-lucide="layers" style="width: 26px; height: 26px;"></i>
+            </div>
+            <h2 style="font-size: 1.8rem; font-weight: 800; color: #111827; margin-bottom: 0.35rem;">Nut & Dry Fruit Classifier</h2>
+            <p style="color: #6B7280;">Identify tree nuts and examine nutritional profiles using the active MobileNet CNN model.</p>
+          </div>
+
+          <div id="nut-upload-zone" style="background: #FFFFFF; border: 2px dashed rgba(201,122,58,0.4); border-radius: 20px; padding: 3rem 2rem; text-align: center; cursor: pointer;">
+            <input type="file" id="nut-file-dash" accept="image/*" style="display: none;" />
+            <div style="width: 60px; height: 60px; border-radius: 50%; background: #FEF3C7; color: #B45309; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem;">
+              <i data-lucide="upload" style="width: 30px; height: 30px;"></i>
+            </div>
+            <div style="font-weight: 700; font-size: 1.15rem; color: #1F2937; margin-bottom: 0.35rem;">Upload Nut or Dry Fruit Photo</div>
+            <div style="font-size: 0.85rem; color: #6B7280; margin-bottom: 1.25rem;">Almond, Walnut, Cashew, Pistachio, Pecan, etc.</div>
+            <button type="button" class="btn btn-primary" id="btn-trigger-nut-input" style="background: #C97A3A; border-color: #C97A3A; pointer-events: none;">Select Nut Image</button>
+          </div>
+
+          <!-- Selected Nut Preview Card -->
+          <div id="nut-preview-card" style="display: none; background: #FFFFFF; border-radius: 20px; border: 1.5px solid rgba(201,122,58,0.3); padding: 1.75rem; margin-top: 1.5rem; box-shadow: 0 10px 25px rgba(0,0,0,0.05);">
+            <div style="display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap;">
+              <img id="nut-preview-thumb" src="" alt="Selected nut specimen" style="width: 140px; height: 140px; object-fit: cover; border-radius: 14px; border: 2px solid #C97A3A; box-shadow: 0 4px 12px rgba(0,0,0,0.08);" />
+              <div style="flex: 1; min-width: 220px;">
+                <div style="display: inline-flex; align-items: center; gap: 0.35rem; background: #FEF3C7; color: #B45309; padding: 0.25rem 0.65rem; border-radius: 999px; font-size: 0.78rem; font-weight: 700; margin-bottom: 0.4rem;">
+                  <i data-lucide="check-circle" style="width: 14px; height: 14px;"></i>
+                  <span>Nut/Seed Image Loaded</span>
+                </div>
+                <div id="nut-preview-filename" style="font-size: 1.2rem; font-weight: 800; color: #111827; word-break: break-all;">nut_sample.jpg</div>
+                <div id="nut-preview-filesize" style="font-size: 0.85rem; color: #6B7280; margin-top: 0.2rem;">Ready for CNN & Gemini AI analysis</div>
+                <div style="display: flex; gap: 0.75rem; margin-top: 1.25rem; flex-wrap: wrap;">
+                  <button type="button" class="btn btn-primary" id="btn-execute-nut-analysis" style="background: #C97A3A; border-color: #C97A3A; padding: 0.65rem 1.5rem; font-weight: 700;">
+                    <i data-lucide="scan" style="width: 18px; height: 18px;"></i>
+                    <span>Analyze Nut Specimen</span>
+                  </button>
+                  <button type="button" class="btn btn-secondary" id="btn-remove-nut" style="padding: 0.65rem 1rem;">
+                    <i data-lucide="refresh-cw" style="width: 16px; height: 16px;"></i>
+                    <span>Change Image</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Nut Loading State -->
+          <div id="nut-loading-card" style="display: none; background: #FFFFFF; border-radius: 20px; border: 1.5px solid rgba(201,122,58,0.25); padding: 2.5rem; text-align: center; margin-top: 1.5rem;">
+            <div style="width: 48px; height: 48px; border: 4px solid #FEF3C7; border-top-color: #C97A3A; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 1.25rem;"></div>
+            <h4 style="font-size: 1.15rem; color: #111827; margin-bottom: 0.4rem;">Classifying Nut & Calculating Nutrition...</h4>
+            <p style="color: #6B7280; font-size: 0.9rem;">Matching against 10 tree nut classes & USDA nutritional profiles...</p>
+          </div>
+
+                    <!-- Preview & Result Area -->
+          <div id="nut-scan-result-card" style="display: none; background: #FFFFFF; border-radius: 20px; border: 1.5px solid rgba(201,122,58,0.25); padding: 2rem; margin-top: 1.5rem; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+            <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: center; margin-bottom: 1.5rem;">
+              <img id="nut-preview-img" src="" alt="Scanned Nut" style="width: 140px; height: 140px; object-fit: cover; border-radius: 14px; border: 2px solid #E5E7EB;" />
+              <div style="flex: 1;">
+                <span class="pill-status pill-amber" style="margin-bottom: 0.5rem;">100% MobileNet CNN Match</span>
+                <h3 id="nut-result-name" style="font-size: 1.6rem; font-weight: 800; color: #111827; margin-bottom: 0.2rem;">Almond</h3>
+                <div id="nut-result-sci" style="font-style: italic; color: #C97A3A; font-weight: 600; font-size: 1rem; margin-bottom: 0.5rem;">Prunus dulcis</div>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                  <span style="font-size: 0.85rem; color: #6B7280;">Confidence:</span>
+                  <span id="nut-result-conf" style="font-weight: 800; color: #15803D; font-size: 1.1rem;">98.5%</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Nutritional Breakdown Cards -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.75rem; margin-bottom: 1.5rem;">
+              <div style="background: #FFFBEB; padding: 0.85rem; border-radius: 10px; border: 1px solid rgba(245,158,11,0.2); text-align: center;">
+                <div style="font-size: 0.75rem; color: #B45309; font-weight: 600;">CALORIES</div>
+                <div id="nut-cal" style="font-size: 1.25rem; font-weight: 800; color: #78350F;">579 kcal</div>
+              </div>
+              <div style="background: #FFFBEB; padding: 0.85rem; border-radius: 10px; border: 1px solid rgba(245,158,11,0.2); text-align: center;">
+                <div style="font-size: 0.75rem; color: #B45309; font-weight: 600;">PROTEIN</div>
+                <div id="nut-protein" style="font-size: 1.25rem; font-weight: 800; color: #78350F;">21.2 g</div>
+              </div>
+              <div style="background: #FFFBEB; padding: 0.85rem; border-radius: 10px; border: 1px solid rgba(245,158,11,0.2); text-align: center;">
+                <div style="font-size: 0.75rem; color: #B45309; font-weight: 600;">HEALTHY FATS</div>
+                <div id="nut-fat" style="font-size: 1.25rem; font-weight: 800; color: #78350F;">49.9 g</div>
+              </div>
+              <div style="background: #FFFBEB; padding: 0.85rem; border-radius: 10px; border: 1px solid rgba(245,158,11,0.2); text-align: center;">
+                <div style="font-size: 0.75rem; color: #B45309; font-weight: 600;">DIETARY FIBER</div>
+                <div id="nut-fiber" style="font-size: 1.25rem; font-weight: 800; color: #78350F;">12.5 g</div>
+              </div>
+            </div>
+
+            <!-- Allergen & Storage Warning -->
+            <div style="background: #FEF2F2; padding: 1.15rem; border-radius: 12px; border: 1px solid rgba(239,68,68,0.2); margin-bottom: 1.5rem;">
+              <div style="display: flex; align-items: center; gap: 0.5rem; color: #DC2626; font-weight: 700; font-size: 0.9rem; margin-bottom: 0.35rem;">
+                <i data-lucide="alert-triangle" style="width: 16px; height: 16px;"></i>
+                <span>Tree Nut Allergen Warning</span>
+              </div>
+              <p id="nut-allergen-desc" style="font-size: 0.85rem; color: #991B1B; line-height: 1.5; margin: 0;">
+                Tree nut allergen alert. Individuals with tree nut sensitivities or oral allergy syndrome should avoid contact.
+              </p>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 0.75rem;">
+              <button class="btn btn-secondary" id="dash-save-nut-btn" onclick="saveCurrentIdentifiedNut()">
+                <i data-lucide="heart" style="width: 16px; height: 16px; color: #E11D48;"></i>
+                <span>Save to Favorites</span>
+              </button>
+              <button class="btn btn-primary" onclick="resetNutScanner()" style="background: #C97A3A; border-color: #C97A3A;">Scan Another Nut</button>
+            </div>
+          </div>
+        </section>
+
+      <!-- ===================================================================
+           TAB 4: EXPLORE PLANTS (from 164 dataset classes)
+           =================================================================== -->
+      <section class="tab-pane" id="tab-explore-plants">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <h2 style="font-size: 1.6rem; font-weight: 800; color: #111827; margin-bottom: 0.25rem;">Medicinal Botanical Species</h2>
+            <p style="color: #6B7280; font-size: 0.9rem;">Browse verified species indexed in the MedLeaf dataset.</p>
+          </div>
+          <input type="text" id="dash-plants-search" placeholder="Search 164 species..." style="padding: 0.65rem 1.25rem; border-radius: 10px; border: 1.5px solid #E5E7EB; width: 280px; font-size: 0.9rem; outline: none;" />
+        </div>
+
+        <div id="dash-plants-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.25rem;">
+          <!-- Loaded dynamically from API -->
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           TAB 5: EXPLORE NUTS
+           =================================================================== -->
+      <section class="tab-pane" id="tab-explore-nuts">
+        <div style="margin-bottom: 1.5rem;">
+          <h2 style="font-size: 1.6rem; font-weight: 800; color: #111827; margin-bottom: 0.25rem;">Nuts & Natural Seeds Explorer</h2>
+          <p style="color: #6B7280; font-size: 0.9rem;">Classes supported by the trained tree-nut MobileNet model.</p>
+        </div>
+
+        <div id="dash-nuts-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1.25rem;">
+          <!-- Loaded dynamically -->
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           TAB 6: SCAN HISTORY
+           =================================================================== -->
+      <section class="tab-pane" id="tab-history">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+          <div>
+            <h2 style="font-size: 1.6rem; font-weight: 800; color: #111827; margin-bottom: 0.25rem;">Your Recognition History</h2>
+            <p style="color: #6B7280; font-size: 0.9rem;">Private history log of all leaf and nut scans performed on your account.</p>
+          </div>
+          <button class="btn btn-secondary" onclick="clearUserHistory()" style="background: #FFFFFF;">Clear History</button>
+        </div>
+
+        <div style="background: #FFFFFF; border-radius: 16px; border: 1.5px solid rgba(46,179,105,0.15); overflow: hidden;">
+          <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+            <thead>
+              <tr style="background: #F9FAFB; border-bottom: 1px solid #E5E7EB; color: #6B7280; font-size: 0.78rem; text-transform: uppercase;">
+                <th style="padding: 1rem 1.25rem;">Classification</th>
+                <th style="padding: 1rem 1.25rem;">Type</th>
+                <th style="padding: 1rem 1.25rem;">Confidence</th>
+                <th style="padding: 1rem 1.25rem;">Timestamp</th>
+                <th style="padding: 1rem 1.25rem; text-align: right;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="full-history-table-body">
+              <!-- Dynamically rendered -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           TAB 7: FAVORITES
+           =================================================================== -->
+      <section class="tab-pane" id="tab-favorites">
+        <div style="margin-bottom: 1.5rem;">
+          <h2 style="font-size: 1.6rem; font-weight: 800; color: #111827; margin-bottom: 0.25rem;">Saved Botanical Favorites</h2>
+          <p style="color: #6B7280; font-size: 0.9rem;">Specimens you have bookmarked for quick reference and study.</p>
+        </div>
+
+        <div id="dash-favorites-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.25rem;">
+          <!-- Dynamically rendered -->
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           TAB 8: MY PROFILE & SETTINGS
+           =================================================================== -->
+      <section class="tab-pane" id="tab-profile">
+        <div style="max-width: 600px; background: #FFFFFF; padding: 2.5rem; border-radius: 20px; border: 1.5px solid rgba(46,179,105,0.15); box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
+          <div style="display: flex; align-items: center; gap: 1.25rem; margin-bottom: 2rem;">
+            <div style="width: 64px; height: 64px; border-radius: 50%; background: #15803D; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 800;">
+              <span id="profile-initial">B</span>
+            </div>
+            <div>
+              <h3 style="font-size: 1.4rem; font-weight: 800; color: #111827; margin-bottom: 0.2rem;" id="profile-name">Botanist User</h3>
+              <div style="font-size: 0.85rem; color: #6B7280;" id="profile-email">user@medleaf.com</div>
+            </div>
+          </div>
+
+          <form id="profile-form" style="display: flex; flex-direction: column; gap: 1.25rem;">
+            <div>
+              <label style="display: block; font-size: 0.82rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Full Name</label>
+              <input type="text" id="profile-name-input" style="width: 100%; padding: 0.75rem 1rem; border-radius: 10px; border: 1.5px solid #E5E7EB; font-size: 0.9rem; outline: none;" />
+            </div>
+            <div>
+              <label style="display: block; font-size: 0.82rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Email Address</label>
+              <input type="email" id="profile-email-input" disabled style="width: 100%; padding: 0.75rem 1rem; border-radius: 10px; border: 1.5px solid #E5E7EB; background: #F9FAFB; font-size: 0.9rem;" />
+            </div>
+            <div>
+              <label style="display: block; font-size: 0.82rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem;">Research Affiliation</label>
+              <input type="text" value="B.Tech AI & ML Department" style="width: 100%; padding: 0.75rem 1rem; border-radius: 10px; border: 1.5px solid #E5E7EB; font-size: 0.9rem;" />
+            </div>
+            <button type="submit" class="btn btn-primary" style="margin-top: 0.5rem; justify-content: center;">Save Profile Changes</button>
+          </form>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <script type="module" src="./dashboard.js?v=20261027_clinical_v3"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

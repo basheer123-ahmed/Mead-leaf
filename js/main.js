@@ -3,6 +3,10 @@
  * Interactive Landing Page JavaScript
  */
 
+const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+  ? (window.location.port === '4000' ? '' : 'http://localhost:4000')
+  : '';
+
 document.addEventListener('DOMContentLoaded', () => {
   // Initialize Lucide icons if available
   if (window.lucide) {
@@ -123,10 +127,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  let currentBase64Image = null;
+
   // Handle selected file validation & render preview
   function handleSelectedFile(file) {
     const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
-    if (!validTypes.includes(file.type)) {
+    if (!validTypes.includes((file.type || '').toLowerCase()) && !file.name.match(/\.(jpe?g|png|webp|jfif)$/i)) {
       alert('Please upload a valid JPG, JPEG, or PNG image.');
       return;
     }
@@ -135,6 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const reader = new FileReader();
     reader.onload = (e) => {
+      currentBase64Image = e.target.result;
       if (previewImg) {
         previewImg.src = e.target.result;
       }
@@ -143,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       if (fileSizeDisplay) {
         const sizeInMb = (file.size / (1024 * 1024)).toFixed(2);
-        fileSizeDisplay.textContent = `${sizeInMb} MB • Ready for AI Inference`;
+        fileSizeDisplay.textContent = `${sizeInMb} MB • Ready for Gemini AI Inference`;
       }
 
       // Switch views
@@ -172,6 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function resetUploadState() {
     currentFile = null;
+    currentBase64Image = null;
     if (fileInput) fileInput.value = '';
     if (cameraInput) cameraInput.value = '';
     if (uploadIdleState) uploadIdleState.style.display = 'flex';
@@ -180,48 +188,138 @@ document.addEventListener('DOMContentLoaded', () => {
     if (placeholderResult) placeholderResult.style.display = 'none';
   }
 
-  // --- 4. Simulated AI Analysis Flow ---
-  if (analyzeBtn) {
-    analyzeBtn.addEventListener('click', () => {
-      runSimulatedAnalysis();
-    });
-  }
+      // --- 4. Real AI Analysis & Botanical Knowledgebase Flow ---
+    if (analyzeBtn) {
+      analyzeBtn.addEventListener('click', () => {
+        executePlantRecognition();
+      });
+    }
 
-  function runSimulatedAnalysis() {
-    uploadPreviewState.style.display = 'none';
-    analysisProgressCard.style.display = 'block';
-    if (placeholderResult) placeholderResult.style.display = 'none';
-    if (progressBarFill) progressBarFill.style.width = '0%';
+    async function executePlantRecognition() {
+      if (!uploadPreviewState || !analysisProgressCard) return;
 
-    const steps = [
-      { text: '01/04: Validating leaf image resolution & contrast...', progress: '25%' },
-      { text: '02/04: Preprocessing & extracting botanical venation features...', progress: '55%' },
-      { text: '03/04: Running deep neural convolutional taxonomy classifier...', progress: '85%' },
-      { text: '04/04: Analysis complete. Prediction model interface ready.', progress: '100%' }
-    ];
+      uploadPreviewState.style.display = 'none';
+      analysisProgressCard.style.display = 'block';
+      if (placeholderResult) placeholderResult.style.display = 'none';
+      if (progressBarFill) progressBarFill.style.width = '0%';
 
-    let currentStep = 0;
-    analysisStepText.textContent = steps[0].text;
-    progressBarFill.style.width = steps[0].progress;
+      const steps = [
+        { text: '01/04: Validating leaf image resolution, aspect ratio & color channels...', progress: '25%' },
+        { text: '02/04: Preprocessing botanical venation, margins & morphological features...', progress: '55%' },
+        { text: '03/04: Matching against 164 species neural dataset weights & MobileNet taxonomy...', progress: '85%' },
+        { text: '04/04: Retrieving verified botanical references and safety precautions...', progress: '100%' }
+      ];
 
-    const interval = setInterval(() => {
-      currentStep++;
-      if (currentStep < steps.length) {
-        analysisStepText.textContent = steps[currentStep].text;
-        progressBarFill.style.width = steps[currentStep].progress;
-      } else {
-        clearInterval(interval);
+      let currentStep = 0;
+      analysisStepText.textContent = steps[0].text;
+      progressBarFill.style.width = steps[0].progress;
+
+      const progressInterval = setInterval(() => {
+        currentStep++;
+        if (currentStep < steps.length) {
+          analysisStepText.textContent = steps[currentStep].text;
+          progressBarFill.style.width = steps[currentStep].progress;
+        } else {
+          clearInterval(progressInterval);
+        }
+      }, 700);
+
+      try {
+        // Query the live MedLeaf API Server
+        const res = await fetch(`${API_BASE}/api/plants/predict`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            fileName: currentFile ? currentFile.name : 'captured_leaf.jpg',
+            image: currentBase64Image
+          })
+        });
+        const data = await res.json();
+
         setTimeout(() => {
-          if (placeholderResult) {
-            placeholderResult.style.display = 'block';
-            if (window.lucide) window.lucide.createIcons();
-          }
-        }, 500);
-      }
-    }, 900);
-  }
+          clearInterval(progressInterval);
+          analysisProgressCard.style.display = 'none';
 
-  // --- 5. Camera Modal / Stream Support ---
+          if (data && data.success && data.prediction) {
+            displayPredictionResults(data.prediction, data.confidenceScore);
+          } else {
+            alert('Recognition engine could not confidently identify the specimen. Please ensure the leaf is clearly visible and in focus.');
+            resetUploadState();
+          }
+        }, 3000);
+      } catch (err) {
+        console.error('Inference error:', err);
+        setTimeout(() => {
+          clearInterval(progressInterval);
+          analysisProgressCard.style.display = 'none';
+          alert('Could not reach the MedLeaf AI inference service. Please check your network or try again.');
+          resetUploadState();
+        }, 1500);
+      }
+    }
+
+    function displayPredictionResults(plant, confScore) {
+      if (!placeholderResult) return;
+
+      const nameEl = document.getElementById('result-plant-name');
+      const sciEl = document.getElementById('result-plant-sci');
+      const localEl = document.getElementById('result-plant-local');
+      const confEl = document.getElementById('result-confidence-val');
+      const familyEl = document.getElementById('result-plant-family');
+      const partsEl = document.getElementById('result-parts-used');
+      const propsEl = document.getElementById('result-properties-badges');
+      const usesEl = document.getElementById('result-traditional-uses');
+      const prepEl = document.getElementById('result-preparation');
+      const precEl = document.getElementById('result-precautions');
+      const toxEl = document.getElementById('result-toxicity');
+
+      if (nameEl) nameEl.textContent = plant.commonName;
+      if (sciEl) sciEl.textContent = plant.scientificName;
+      if (localEl) localEl.textContent = `Local Names: ${plant.localNames || 'None verified'}`;
+      if (confEl) confEl.textContent = `${(confScore * 100).toFixed(1)}%`;
+      if (familyEl) familyEl.textContent = plant.botanicalFamily;
+      if (partsEl) partsEl.textContent = Array.isArray(plant.partsUsed) ? plant.partsUsed.join(', ') : plant.partsUsed;
+      if (usesEl) usesEl.textContent = plant.traditionalUses;
+      if (prepEl) prepEl.textContent = plant.preparationMethods;
+      if (precEl) precEl.textContent = plant.precautions;
+      if (toxEl) toxEl.textContent = plant.knownToxicity ? `Toxicity Information: ${plant.knownToxicity}` : '';
+
+      // Properties badges
+      if (propsEl && plant.medicinalProperties) {
+        propsEl.innerHTML = plant.medicinalProperties.map(p => 
+          `<span style="background: rgba(201,122,58,0.12); color: #8B4513; padding: 0.35rem 0.75rem; border-radius: 8px; font-size: 0.82rem; font-weight: 600;">${p}</span>`
+        ).join('');
+      }
+
+      // Hook up Save Favorite action
+      const favBtn = document.getElementById('save-favorite-btn');
+      const favLabel = document.getElementById('fav-btn-label');
+      if (favBtn && favLabel) {
+        favBtn.onclick = async () => {
+          try {
+            await fetch(`${API_BASE}/api/favorites`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ plantId: plant.plantId })
+            });
+            favLabel.textContent = 'Saved to Favorites!';
+            favBtn.style.background = '#EBF7F0';
+            favBtn.style.color = '#15803D';
+          } catch (e) {
+            console.error('Error saving favorite:', e);
+          }
+        };
+      }
+
+      // Re-initialize icons
+      placeholderResult.style.display = 'block';
+      if (window.lucide) window.lucide.createIcons();
+
+      // Scroll to view
+      placeholderResult.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    // --- 5. Camera Modal / Stream Support ---
   const cameraModal = document.getElementById('camera-modal');
   const closeCameraBtn = document.getElementById('close-camera-modal-btn');
   const snapPhotoBtn = document.getElementById('snap-photo-btn');
@@ -386,4 +484,208 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
+
+  // --- 8. Authentication (Login & Register) Modal Controller ---
+  const authModal = document.getElementById('auth-modal');
+  const authModalClose = document.getElementById('auth-modal-close');
+  const navLoginBtn = document.getElementById('nav-login-btn');
+  const navRegisterBtn = document.getElementById('nav-register-btn');
+  const mobileLoginBtn = document.getElementById('mobile-login-btn');
+  const mobileRegisterBtn = document.getElementById('mobile-register-btn');
+  const tabLogin = document.getElementById('tab-login');
+  const tabRegister = document.getElementById('tab-register');
+  const authTitle = document.getElementById('auth-modal-title');
+  const authSubtitle = document.getElementById('auth-modal-subtitle');
+  const authNameGroup = document.getElementById('auth-name-group');
+  const authSubmitBtn = document.getElementById('auth-submit-btn');
+  const authAlert = document.getElementById('auth-alert');
+  const authForm = document.getElementById('auth-form');
+  const userProfileBadge = document.getElementById('user-profile-badge');
+  const userDisplayName = document.getElementById('user-display-name');
+  const logoutBtn = document.getElementById('logout-btn');
+
+  let currentAuthMode = 'login'; // 'login' or 'register'
+
+  function openAuthModal(mode) {
+    currentAuthMode = mode;
+    authAlert.style.display = 'none';
+    if (mode === 'login') {
+      tabLogin.style.background = '#FFFFFF';
+      tabLogin.style.color = '#2C1A0E';
+      tabLogin.style.boxShadow = '0 2px 4px rgba(0,0,0,0.05)';
+      tabRegister.style.background = 'transparent';
+      tabRegister.style.color = '#6B3F1F';
+      tabRegister.style.boxShadow = 'none';
+
+      authTitle.textContent = 'Welcome Back';
+      authSubtitle.textContent = 'Sign in to your botanical research account';
+      authNameGroup.style.display = 'none';
+      authSubmitBtn.innerHTML = '<span>Sign In</span>';
+    } else {
+      tabRegister.style.background = '#FFFFFF';
+      tabRegister.style.color = '#2C1A0E';
+      tabRegister.style.boxShadow = '0 2px 4px rgba(0,0,0,0.05)';
+      tabLogin.style.background = 'transparent';
+      tabLogin.style.color = '#6B3F1F';
+      tabLogin.style.boxShadow = 'none';
+
+      authTitle.textContent = 'Create Account';
+      authSubtitle.textContent = 'Join the MedLeaf AI botanical platform';
+      authNameGroup.style.display = 'block';
+      authSubmitBtn.innerHTML = '<span>Create Account</span>';
+    }
+    authModal.style.display = 'flex';
+    authModal.classList.add('active');
+    if (window.lucide) window.lucide.createIcons();
+  }
+
+  function closeAuthModal() {
+    authModal.style.display = 'none';
+    authModal.classList.remove('active');
+  }
+
+  if (navLoginBtn) navLoginBtn.addEventListener('click', () => openAuthModal('login'));
+  if (navRegisterBtn) navRegisterBtn.addEventListener('click', () => openAuthModal('register'));
+  if (mobileLoginBtn) mobileLoginBtn.addEventListener('click', () => openAuthModal('login'));
+  if (mobileRegisterBtn) mobileRegisterBtn.addEventListener('click', () => openAuthModal('register'));
+  if (tabLogin) tabLogin.addEventListener('click', () => openAuthModal('login'));
+  if (tabRegister) tabRegister.addEventListener('click', () => openAuthModal('register'));
+  if (authModalClose) authModalClose.addEventListener('click', closeAuthModal);
+
+  if (authModal) {
+    authModal.addEventListener('click', (e) => {
+      if (e.target === authModal) closeAuthModal();
+    });
+  }
+
+  // Restore authenticated session from localStorage
+  const storedUser = localStorage.getItem('medleaf_user');
+  if (storedUser) {
+    try {
+      const u = JSON.parse(storedUser);
+      setAuthenticatedUser(u);
+    } catch (e) {}
+  }
+
+  function setAuthenticatedUser(user) {
+    if (navLoginBtn) navLoginBtn.style.display = 'none';
+    if (navRegisterBtn) navRegisterBtn.style.display = 'none';
+    if (userProfileBadge) {
+      userProfileBadge.style.display = 'inline-flex';
+      userDisplayName.textContent = user.name || user.email;
+    }
+  }
+
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', () => {
+      localStorage.removeItem('medleaf_user');
+      localStorage.removeItem('medleaf_token');
+      if (userProfileBadge) userProfileBadge.style.display = 'none';
+      if (navLoginBtn) navLoginBtn.style.display = 'inline-flex';
+      if (navRegisterBtn) navRegisterBtn.style.display = 'inline-flex';
+    });
+  }
+
+  // Handle Auth Form Submission
+  if (authForm) {
+    authForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      authAlert.style.display = 'none';
+      const email = document.getElementById('auth-email').value;
+      const password = document.getElementById('auth-password').value;
+      const name = document.getElementById('auth-name').value;
+
+      authSubmitBtn.disabled = true;
+      authSubmitBtn.innerHTML = '<span>Processing...</span>';
+
+      const endpoint = currentAuthMode === 'login' ? `${API_BASE}/api/auth/login` : `${API_BASE}/api/auth/register`;
+      const payload = currentAuthMode === 'login' ? { email, password } : { name, email, password };
+
+      try {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+        authSubmitBtn.disabled = false;
+        authSubmitBtn.innerHTML = currentAuthMode === 'login' ? '<span>Sign In</span>' : '<span>Create Account</span>';
+
+        if (!data.success) {
+          authAlert.style.display = 'block';
+          authAlert.style.background = 'rgba(239, 68, 68, 0.12)';
+          authAlert.style.color = '#B91C1C';
+          authAlert.style.border = '1px solid rgba(239, 68, 68, 0.3)';
+          authAlert.textContent = data.message || 'Authentication error.';
+          return;
+        }
+
+        authAlert.style.display = 'block';
+        authAlert.style.background = 'rgba(46, 179, 105, 0.15)';
+        authAlert.style.color = '#15803D';
+        authAlert.style.border = '1px solid rgba(46, 179, 105, 0.3)';
+        authAlert.textContent = data.message || 'Success!';
+
+                if (currentAuthMode === 'login') {
+          localStorage.setItem('medleaf_user', JSON.stringify(data.user));
+          if (data.token) localStorage.setItem('medleaf_token', data.token);
+          setAuthenticatedUser(data.user);
+          
+          setTimeout(() => {
+            closeAuthModal();
+            // Directly navigate to full dedicated User Dashboard
+            window.location.href = '/dashboard/';
+          }, 400);
+        } else {
+          // If registered successfully, automatically switch to login tab
+          setTimeout(() => { openAuthModal('login'); }, 1000);
+        }
+      } catch (err) {
+        authSubmitBtn.disabled = false;
+        authSubmitBtn.innerHTML = currentAuthMode === 'login' ? '<span>Sign In</span>' : '<span>Create Account</span>';
+        authAlert.style.display = 'block';
+        authAlert.style.background = 'rgba(239, 68, 68, 0.12)';
+        authAlert.style.color = '#B91C1C';
+        authAlert.textContent = 'Server connection failed. Please verify your connection or try again.';
+      }
+    });
+  }
+
+  // --- 9. Dashboard Dynamic Data & Actions ---
+  const dashRefreshBtn = document.getElementById('dash-refresh-btn');
+  const dashPlantsCount = document.getElementById('kpi-plants-count');
+  const dashNutsCount = document.getElementById('kpi-nuts-count');
+  const dashQuickNutBtn = document.getElementById('dash-quick-nut-btn');
+  const clearHistoryBtn = document.getElementById('clear-history-btn');
+  const dashHistoryList = document.getElementById('dash-history-list');
+
+  async function fetchDashboardMetrics() {
+    try {
+      const res = await fetch(`${API_BASE}/api/health`);
+      const data = await res.json();
+      if (dashPlantsCount && data.plantClassesCount) dashPlantsCount.textContent = data.plantClassesCount;
+      if (dashNutsCount && data.nutClassesCount) dashNutsCount.textContent = data.nutClassesCount;
+    } catch (e) {
+      console.log('Using cached dashboard counters');
+    }
+  }
+
+  fetchDashboardMetrics();
+  if (dashRefreshBtn) dashRefreshBtn.addEventListener('click', fetchDashboardMetrics);
+
+  if (clearHistoryBtn && dashHistoryList) {
+    clearHistoryBtn.addEventListener('click', () => {
+      dashHistoryList.innerHTML = '<div style="padding: 1.5rem; text-align: center; color: #9C7A5A; font-size: 0.9rem;">No scans recorded yet. Perform a scan above!</div>';
+    });
+  }
+
+  if (dashQuickNutBtn) {
+    dashQuickNutBtn.addEventListener('click', () => {
+      const uploadSec = document.getElementById('upload-section');
+      if (uploadSec) uploadSec.scrollIntoView({ behavior: 'smooth' });
+    });
+  }
 });
+
+

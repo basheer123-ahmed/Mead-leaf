@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Meadleaf — AI-Powered Medicinal Plant Recognition</title>
+  <title>MedLeaf AI - AI-Powered Medicinal Plant Recognition</title>
   <meta name="description" content="Identify medicinal plants with AI. Upload an image or capture a photo and let Meadleaf recognize the plant and help you discover more about it." />
   
   <!-- Favicon -->
@@ -18,7 +18,7 @@
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <!-- Custom Stylesheet with Cache Busting -->
-  <link rel="stylesheet" href="css/styles.css?v=7.0" />
+  <link rel="stylesheet" href="css/styles.css?v=25.0" />
 </head>
 <body>
 
@@ -47,7 +47,13 @@
 
         <!-- Right Auth / Action CTAs -->
         <div class="nav-actions">
-          <button class="btn btn-ghost" type="button" onclick="alert('Login portal will be available in the upcoming project phase.')">Login</button>
+          <button class="btn btn-ghost" type="button" id="nav-login-btn">Login</button>
+          <button class="btn btn-secondary" type="button" id="nav-register-btn" style="display: inline-flex;">Register</button>
+                    <a href="/dashboard/" id="user-profile-badge" style="display: none; text-decoration: none; align-items: center; gap: 0.5rem; background: rgba(201, 122, 58, 0.15); padding: 0.45rem 1rem; border-radius: var(--radius-pill); border: 1.5px solid rgba(201, 122, 58, 0.35); cursor: pointer; transition: all 0.2s ease;">
+            <i data-lucide="layout-dashboard" style="width: 16px; height: 16px; color: #15803D;"></i>
+            <span id="user-display-name" style="font-size: 0.88rem; font-weight: 700; color: #2C1A0E;">Botanist User</span>
+            <span style="font-size: 0.75rem; color: #15803D; font-weight: 700; background: #DCFCE7; padding: 0.15rem 0.5rem; border-radius: 999px;">Open Dashboard &rarr;</span>
+          </a>
           <a href="#upload-section" class="btn btn-primary">
             <span>Get Started</span>
             <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
@@ -71,7 +77,8 @@
         <li><a href="#about-section" class="nav-link">About</a></li>
       </ul>
       <div class="nav-actions">
-        <button class="btn btn-secondary" type="button" onclick="alert('Login portal will be available in the upcoming project phase.')">Login</button>
+        <button class="btn btn-secondary" type="button" id="mobile-login-btn">Login</button>
+        <button class="btn btn-secondary" type="button" id="mobile-register-btn">Register</button>
         <a href="#upload-section" class="btn btn-primary">Get Started</a>
       </div>
     </div>
@@ -230,7 +237,7 @@
 
             <div class="supported-formats-info">
               <i data-lucide="info" style="width: 14px; height: 14px;"></i>
-              <span>Supported formats: JPG, JPEG, PNG • Direct instant upload</span>
+              <span>Supported formats: JPG, JPEG, PNG ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ Direct instant upload</span>
             </div>
           </div>
 
@@ -292,19 +299,89 @@
             </div>
 
             <!-- Placeholder result banner shown upon simulated completion -->
-            <div class="analysis-placeholder-result" id="analysis-placeholder-result">
-              <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                <i data-lucide="sparkles" style="color: #34D399; width: 22px; height: 22px; flex-shrink: 0; margin-top: 2px;"></i>
+                        <!-- RICH BOTANICAL SCAN RESULT MODAL / EMBED -->
+            <div class="analysis-placeholder-result" id="analysis-placeholder-result" style="display: none; background: #FFFFFF; border-radius: 20px; padding: 2rem; border: 1.5px solid rgba(201,122,58,0.3); box-shadow: 0 15px 40px rgba(0,0,0,0.15); margin-top: 2rem;">
+              <!-- Header -->
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; border-bottom: 1px solid rgba(201,122,58,0.2); padding-bottom: 1.25rem; margin-bottom: 1.5rem;">
                 <div>
-                  <h4 style="color: #FFFFFF; font-size: 1.05rem; margin-bottom: 0.3rem;">Pre-Inference Processing Complete</h4>
-                  <p style="color: rgba(255, 255, 255, 0.75); font-size: 0.88rem; line-height: 1.5; margin-bottom: 1rem;">
-                    Visual features and leaf morphology have been normalized. The system is ready to connect with the trained deep-learning classification pipeline.
-                  </p>
-                  <button type="button" class="btn btn-outline-green" id="reanalyze-btn" style="color: #34D399; border-color: #34D399;">
-                    <i data-lucide="rotate-ccw" style="width: 16px; height: 16px;"></i>
-                    <span>Scan Another Leaf</span>
-                  </button>
+                  <div style="display: inline-flex; align-items: center; gap: 0.4rem; background: #EBF7F0; color: #15803D; padding: 0.35rem 0.85rem; border-radius: 999px; font-size: 0.8rem; font-weight: 700; margin-bottom: 0.5rem;">
+                    <i data-lucide="check-circle" style="width: 14px; height: 14px;"></i>
+                    <span>Identified with High Confidence</span>
+                  </div>
+                  <h3 id="result-plant-name" style="color: #2C1A0E; font-size: 1.8rem; font-weight: 800; margin-bottom: 0.2rem;">Tulsi (Holy Basil)</h3>
+                  <div id="result-plant-sci" style="color: #C97A3A; font-style: italic; font-size: 1.05rem; font-weight: 600;">Ocimum sanctum</div>
+                  <div id="result-plant-local" style="color: #6B3F1F; font-size: 0.9rem; margin-top: 0.25rem;">Local Names: Tulasi, Krishna Tulsi, Holy Basil</div>
                 </div>
+                <div style="text-align: right; background: #F8FAF9; padding: 0.8rem 1.2rem; border-radius: 12px; border: 1px solid rgba(46,179,105,0.2);">
+                  <div style="font-size: 0.8rem; color: #6B3F1F; font-weight: 600;">Confidence Score</div>
+                  <div id="result-confidence-val" style="font-size: 1.7rem; font-weight: 800; color: #15803D;">98.4%</div>
+                </div>
+              </div>
+
+              <!-- Main Detail Cards Grid -->
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem;">
+                <!-- Card 1: Family & Classification -->
+                <div style="background: #FDFBF8; padding: 1.2rem; border-radius: 14px; border: 1px solid rgba(201,122,58,0.15);">
+                  <div style="font-size: 0.85rem; font-weight: 700; color: #C97A3A; text-transform: uppercase; margin-bottom: 0.4rem;">Botanical Family</div>
+                  <div id="result-plant-family" style="font-weight: 600; color: #2C1A0E;">Lamiaceae (Mint Family)</div>
+                </div>
+
+                <!-- Card 2: Parts Used -->
+                <div style="background: #FDFBF8; padding: 1.2rem; border-radius: 14px; border: 1px solid rgba(201,122,58,0.15);">
+                  <div style="font-size: 0.85rem; font-weight: 700; color: #C97A3A; text-transform: uppercase; margin-bottom: 0.4rem;">Plant Parts Used</div>
+                  <div id="result-parts-used" style="font-weight: 600; color: #2C1A0E;">Leaves, Stems, Seeds</div>
+                </div>
+              </div>
+
+              <!-- Medicinal Properties Badges -->
+              <div style="margin-bottom: 1.5rem;">
+                <div style="font-size: 0.88rem; font-weight: 700; color: #2C1A0E; margin-bottom: 0.6rem;">Medicinal Properties</div>
+                <div id="result-properties-badges" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                  <span style="background: rgba(201,122,58,0.12); color: #8B4513; padding: 0.35rem 0.75rem; border-radius: 8px; font-size: 0.82rem; font-weight: 600;">Adaptogenic</span>
+                </div>
+              </div>
+
+              <!-- Traditional Uses & Preparation -->
+              <div style="margin-bottom: 1.5rem; background: #FAF7F2; padding: 1.25rem; border-radius: 14px; border: 1px solid rgba(201,122,58,0.15);">
+                <div style="font-size: 0.92rem; font-weight: 700; color: #2C1A0E; margin-bottom: 0.4rem;">Traditional Medicinal Uses & Benefits</div>
+                <p id="result-traditional-uses" style="color: #6B3F1F; font-size: 0.92rem; line-height: 1.6; margin-bottom: 0.8rem;"></p>
+                
+                <div style="font-size: 0.92rem; font-weight: 700; color: #2C1A0E; margin-bottom: 0.4rem;">Traditional Preparation Methods</div>
+                <p id="result-preparation" style="color: #6B3F1F; font-size: 0.92rem; line-height: 1.6;"></p>
+              </div>
+
+              <!-- Precautions & Toxicity Warning -->
+              <div style="margin-bottom: 1.5rem; background: #FFF8F0; padding: 1.25rem; border-radius: 14px; border-left: 4px solid #C97A3A; border-top: 1px solid rgba(201,122,58,0.2); border-right: 1px solid rgba(201,122,58,0.2); border-bottom: 1px solid rgba(201,122,58,0.2);">
+                <div style="display: flex; align-items: center; gap: 0.5rem; color: #C97A3A; font-weight: 700; font-size: 0.95rem; margin-bottom: 0.35rem;">
+                  <i data-lucide="shield-alert" style="width: 18px; height: 18px;"></i>
+                  <span>Safety Precautions & Known Warnings</span>
+                </div>
+                <p id="result-precautions" style="color: #8B4513; font-size: 0.9rem; line-height: 1.55; margin-bottom: 0.5rem;"></p>
+                <div id="result-toxicity" style="color: #A0522D; font-size: 0.85rem; font-weight: 600;"></div>
+              </div>
+
+              <!-- Medical Disclaimer (Required by Guidelines) -->
+              <div style="background: #F8FAF9; padding: 1rem 1.25rem; border-radius: 12px; border: 1px solid rgba(46,179,105,0.2); margin-bottom: 1.75rem;">
+                <div style="font-size: 0.82rem; font-weight: 700; color: #15803D; margin-bottom: 0.25rem; text-transform: uppercase;">Medical Disclaimer</div>
+                <p style="font-size: 0.8rem; color: #4A6B56; line-height: 1.5; margin: 0;">
+                  MedLeaf provides botanical information and educational summaries of traditional medicinal uses. Image predictions may be incorrect, and this information is not a medical diagnosis or treatment recommendation. Do not consume, prepare, or apply an unidentified plant based solely on an AI prediction. Consult a qualified healthcare professional before using medicinal plants.
+                </p>
+              </div>
+
+              <!-- Action Buttons -->
+              <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                <button type="button" class="btn btn-secondary" id="save-favorite-btn" style="background: #FAF5EF; border-color: rgba(201,122,58,0.35); color: #6B3F1F;">
+                  <i data-lucide="heart" style="width: 16px; height: 16px; color: #C97A3A;"></i>
+                  <span id="fav-btn-label">Save to Favorites</span>
+                </button>
+                <a href="/dashboard/" class="btn btn-secondary" style="background: #FAF5EF; border-color: rgba(201,122,58,0.35); color: #6B3F1F;">
+                  <i data-lucide="list" style="width: 16px; height: 16px;"></i>
+                  <span>View in Dashboard</span>
+                </a>
+                <button type="button" class="btn btn-primary" id="reanalyze-btn">
+                  <i data-lucide="rotate-ccw" style="width: 16px; height: 16px;"></i>
+                  <span>Scan Another Leaf</span>
+                </button>
               </div>
             </div>
           </div>
@@ -558,9 +635,9 @@
           <div class="cta-banner-glow"></div>
           <div class="cta-banner-content">
             <h2 class="cta-title">Have a Plant to Identify?</h2>
-            <p class="cta-subtitle">Let Meadleaf help you discover what’s growing around you.</p>
+            <p class="cta-subtitle">Let Meadleaf help you discover whatÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢s growing around you.</p>
             <a href="#upload-section" class="btn cta-banner-btn">
-              <span>🌿 Identify a Plant</span>
+              <span>ÃƒÂ°Ã…Â¸Ã…â€™Ã‚Â¿ Identify a Plant</span>
             </a>
           </div>
         </div>
@@ -653,7 +730,61 @@
     </div>
   </div>
 
+  <!-- Authentication Modal (Login & Register) -->
+  <div class="plant-modal" id="auth-modal" style="display: none;">
+    <div class="plant-modal-dialog" style="max-width: 440px; padding: 2.5rem 2rem; background: #FFFFFF; border-radius: var(--radius-lg); box-shadow: 0 20px 40px rgba(44, 26, 14, 0.15); border: 1.5px solid rgba(201, 122, 58, 0.25);">
+      <button type="button" class="plant-modal-close" id="auth-modal-close" style="top: 1.2rem; right: 1.2rem;">
+        <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+      </button>
+      
+      <!-- Modal Header -->
+      <div style="text-align: center; margin-bottom: 1.5rem;">
+        <div style="width: 48px; height: 48px; background: rgba(201, 122, 58, 0.15); color: #C97A3A; border-radius: 14px; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 0.8rem;">
+          <i data-lucide="leaf" style="width: 24px; height: 24px;"></i>
+        </div>
+        <h3 id="auth-modal-title" style="font-size: 1.5rem; font-weight: 700; color: #2C1A0E; margin-bottom: 0.3rem;">Welcome to MedLeaf</h3>
+        <p id="auth-modal-subtitle" style="font-size: 0.9rem; color: #6B3F1F;">Sign in to your botanical research account</p>
+      </div>
+
+      <!-- Tab Switcher -->
+      <div style="display: flex; background: #F5E6D3; padding: 4px; border-radius: 10px; margin-bottom: 1.5rem;">
+        <button type="button" id="tab-login" style="flex: 1; padding: 8px; border-radius: 8px; font-weight: 600; font-size: 0.85rem; border: none; cursor: pointer; background: #FFFFFF; color: #2C1A0E; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">Login</button>
+        <button type="button" id="tab-register" style="flex: 1; padding: 8px; border-radius: 8px; font-weight: 600; font-size: 0.85rem; border: none; cursor: pointer; background: transparent; color: #6B3F1F;">Register</button>
+      </div>
+
+      <!-- Error / Success Alert -->
+      <div id="auth-alert" style="display: none; padding: 0.75rem 1rem; border-radius: 8px; font-size: 0.85rem; margin-bottom: 1rem;"></div>
+
+      <!-- Auth Form -->
+      <form id="auth-form" style="display: flex; flex-direction: column; gap: 1rem;">
+        <div id="auth-name-group" style="display: none;">
+          <label style="display: block; font-size: 0.82rem; font-weight: 600; color: #2C1A0E; margin-bottom: 0.4rem;">Full Name</label>
+          <input type="text" id="auth-name" placeholder="Dr. Jane Botanist" style="width: 100%; padding: 0.75rem 1rem; border: 1.5px solid rgba(201, 122, 58, 0.25); border-radius: 10px; outline: none; font-size: 0.9rem;" />
+        </div>
+
+        <div>
+          <label style="display: block; font-size: 0.82rem; font-weight: 600; color: #2C1A0E; margin-bottom: 0.4rem;">Email Address</label>
+          <input type="email" id="auth-email" required placeholder="you@domain.com" style="width: 100%; padding: 0.75rem 1rem; border: 1.5px solid rgba(201, 122, 58, 0.25); border-radius: 10px; outline: none; font-size: 0.9rem;" />
+        </div>
+
+        <div>
+          <label style="display: block; font-size: 0.82rem; font-weight: 600; color: #2C1A0E; margin-bottom: 0.4rem;">Password</label>
+          <input type="password" id="auth-password" required placeholder="ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢" style="width: 100%; padding: 0.75rem 1rem; border: 1.5px solid rgba(201, 122, 58, 0.25); border-radius: 10px; outline: none; font-size: 0.9rem;" />
+        </div>
+
+        <button type="submit" id="auth-submit-btn" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 0.9rem; font-size: 1rem; margin-top: 0.5rem;">
+          <span>Sign In</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
   <!-- Main JavaScript File -->
-  <script type="module" src="js/main.js"></script>
+  <script type="module" src="js/main.js?v=20261027_auth_fix"></script>
 </body>
 </html>
+
+
+
+
+

@@ -21,9 +21,15 @@
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "isomorphic-git": "^1.44.5",
+    "lucide-react": "^1.62.0",
+    "mongoose": "^9.11.4",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
   },
   "devDependencies": {
+    "@vitejs/plugin-react": "^6.1.2",
     "vite": "^8.2.2"
   }
 }

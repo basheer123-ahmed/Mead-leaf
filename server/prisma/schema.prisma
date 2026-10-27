@@ -1,0 +1,213 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum RecognitionType {
+  PLANT
+  NUT
+}
+
+model User {
+  id           String          @id @default(uuid())
+  email        String          @unique
+  passwordHash String
+  name         String
+  role         Role            @default(USER)
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+
+  predictions   Prediction[]
+  scanHistories ScanHistory[]
+  favoritePlants FavoritePlant[]
+  favoriteNuts   FavoriteNut[]
+  feedbacks      Feedback[]
+  auditLogs      AdminAuditLog[]
+}
+
+model Plant {
+  id              String           @id @default(uuid())
+  commonName      String
+  scientificName  String           @unique
+  botanicalFamily String?
+  category        String?
+  description     String           @db.Text
+  leafFeatures    String?          @db.Text
+  flowerFeatures  String?          @db.Text
+  medicinalUses   String?          @db.Text
+  partsUsed       String?
+  habitat         String?
+  toxicityWarning String?          @db.Text
+  imageUrl        String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  synonyms        PlantSynonym[]
+  references      PlantReference[]
+  favorites       FavoritePlant[]
+  predictions     Prediction[]
+}
+
+model PlantSynonym {
+  id        String   @id @default(uuid())
+  plantId   String
+  synonym   String
+  region    String?
+  plant     Plant    @relation(fields: [plantId], references: [id], onDelete: Cascade)
+}
+
+model PlantReference {
+  id        String   @id @default(uuid())
+  plantId   String
+  title     String
+  sourceUrl String?
+  doi       String?
+  plant     Plant    @relation(fields: [plantId], references: [id], onDelete: Cascade)
+}
+
+model NutItem {
+  id              String           @id @default(uuid())
+  commonName      String
+  scientificName  String?
+  category        String?
+  description     String           @db.Text
+  allergenWarning String?          @db.Text
+  storageInfo     String?          @db.Text
+  imageUrl        String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  nutrition       NutritionRecord?
+  favorites       FavoriteNut[]
+  predictions     Prediction[]
+}
+
+model NutritionRecord {
+  id             String   @id @default(uuid())
+  nutId          String   @unique
+  calories       Float?
+  proteinG       Float?
+  fatG           Float?
+  carbsG         Float?
+  fiberG         Float?
+  servingSize    String   @default("100g")
+  nut            NutItem  @relation(fields: [nutId], references: [id], onDelete: Cascade)
+}
+
+model Dataset {
+  id          String         @id @default(uuid())
+  name        String         @unique
+  type        RecognitionType
+  description String?
+  classes     DatasetClass[]
+  createdAt   DateTime       @default(now())
+}
+
+model DatasetClass {
+  id        String   @id @default(uuid())
+  datasetId String
+  className String
+  labelIndex Int
+  dataset   Dataset  @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+
+  @@unique([datasetId, className])
+}
+
+model ModelVersion {
+  id          String          @id @default(uuid())
+  name        String
+  version     String
+  type        RecognitionType
+  accuracy    Float?
+  framework   String          @default("TensorFlow/Keras")
+  isActive    Boolean         @default(false)
+  createdAt   DateTime        @default(now())
+
+  predictions Prediction[]
+}
+
+model Prediction {
+  id              String          @id @default(uuid())
+  userId          String?
+  type            RecognitionType
+  predictedClass  String
+  confidence      Float
+  topKJson        Json?
+  imageRef        String
+  inferenceTimeMs Float?
+  modelVersionId  String?
+  plantId         String?
+  nutId           String?
+  createdAt       DateTime        @default(now())
+
+  user            User?           @relation(fields: [userId], references: [id], onDelete: SetNull)
+  modelVersion    ModelVersion?   @relation(fields: [modelVersionId], references: [id], onDelete: SetNull)
+  plant           Plant?          @relation(fields: [plantId], references: [id], onDelete: SetNull)
+  nut             NutItem?        @relation(fields: [nutId], references: [id], onDelete: SetNull)
+  scanHistories   ScanHistory[]
+}
+
+model ScanHistory {
+  id           String      @id @default(uuid())
+  userId       String
+  predictionId String
+  createdAt    DateTime    @default(now())
+
+  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  prediction   Prediction  @relation(fields: [predictionId], references: [id], onDelete: Cascade)
+}
+
+model FavoritePlant {
+  id        String   @id @default(uuid())
+  userId    String
+  plantId   String
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plant     Plant    @relation(fields: [plantId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, plantId])
+}
+
+model FavoriteNut {
+  id        String   @id @default(uuid())
+  userId    String
+  nutId     String
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  nut       NutItem  @relation(fields: [nutId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, nutId])
+}
+
+model Feedback {
+  id        String   @id @default(uuid())
+  userId    String?
+  name      String
+  email     String
+  message   String   @db.Text
+  createdAt DateTime @default(now())
+
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+}
+
+model AdminAuditLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  action    String
+  resource  String
+  details   Json?
+  createdAt DateTime @default(now())
+
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+}

@@ -1,0 +1,206 @@
+{
+  "aloevera": {
+    "id": "aloevera",
+    "commonName": "Aloe Vera",
+    "scientificName": "Aloe barbadensis Miller",
+    "localNames": "Ghritkumari, Korphad, Katralai, Kumari",
+    "botanicalFamily": "Asphodelaceae",
+    "medicinalProperties": ["Epithelial Soothing", "Wound Healing", "Anti-inflammatory", "Moisturizing", "Digestive Soother"],
+    "traditionalUses": "Traditionally applied raw to soothe sunburns, minor cuts, skin irritation, and consumed as a cooling digestive tonic.",
+    "potentialHealthBenefits": "Promotes skin repair, accelerates thermal burn healing, supports gastrointestinal mucosal lining, and hydrates dermal layers.",
+    "partsUsed": ["Inner Gel Fillet", "Leaf Juice"],
+    "preparationMethods": "Fresh transparent inner fillet scooped and applied topically; inner gel blended with water for digestive wellness.",
+    "precautions": "Avoid yellow outer latex (aloin) during pregnancy and kidney disease. Gel itself is gentle and safe.",
+    "knownToxicity": "Inner gel is non-toxic. High-aloin whole leaf extracts should not be chronically ingested.",
+    "references": [
+      { "title": "Aloe vera: A Short Review", "source": "Indian Journal of Dermatology", "url": "https://pubmed.ncbi.nlm.nih.gov/19882025/" }
+    ]
+  },
+  "amla": {
+    "id": "amla",
+    "commonName": "Amla (Indian Gooseberry)",
+    "scientificName": "Phyllanthus emblica (Emblica officinalis)",
+    "localNames": "Amalaki, Dhatri, Usirikaya, Nelli",
+    "botanicalFamily": "Phyllanthaceae",
+    "medicinalProperties": ["High Vitamin C Antioxidant", "Immunomodulatory", "Hepatoprotective", "Cardiotonic", "Anti-aging Rasayana"],
+    "traditionalUses": "Key ingredient in Chyawanprash and Triphala. Revered in Ayurveda as a premier Rasayana for longevity, digestion, and hair rejuvenation.",
+    "potentialHealthBenefits": "Enormously high bioavailable Vitamin C protects cellular DNA, optimizes lipid metabolism, and promotes scalp follicle health.",
+    "partsUsed": ["Fresh & Dried Fruits", "Seeds", "Leaves"],
+    "preparationMethods": "Fresh fruit juice taken with honey; dried fruit powder (churna); infused herbal hair oils.",
+    "precautions": "Generally extremely safe. Due to high acidity, take after food if sensitive to heartburn.",
+    "knownToxicity": "Non-toxic food fruit.",
+    "references": [
+      { "title": "Therapeutic potential of Phyllanthus emblica (amla): the evidence from clinical studies", "source": "PubMed", "url": "https://pubmed.ncbi.nlm.nih.gov/31337059/" }
+    ]
+  },
+  "amruta_balli": {
+    "id": "amruta_balli",
+    "commonName": "Giloy (Guduchi / Amruta Balli)",
+    "scientificName": "Tinospora cordifolia",
+    "localNames": "Guduchi, Amrita, Giloe, Seenthil Kodi",
+    "botanicalFamily": "Menispermaceae",
+    "medicinalProperties": ["Antipyretic", "Immunostimulant", "Anti-inflammatory", "Detoxifying", "Hypoglycemic"],
+    "traditionalUses": "Known as 'Amrita' (Heavenly Nectar) in Ayurveda. Renowned for relieving chronic recurrent fevers, boosting white blood cells, and purifying the blood.",
+    "potentialHealthBenefits": "Stimulates macrophage phagocytosis, supports platelet recovery in fevers, and regulates glycemic parameters.",
+    "partsUsed": ["Stem", "Root", "Leaves"],
+    "preparationMethods": "Decoction (Kashayam) of crushed fresh stems boiled down to 1/4th volume; Guduchi Satva (purified starch extract).",
+    "precautions": "Diabetic patients should monitor blood glucose as it has mild synergistic hypoglycemic activity.",
+    "knownToxicity": "Non-toxic at therapeutic dosages.",
+    "references": [
+      { "title": "Tinospora cordifolia: One plant, many roles", "source": "PubMed", "url": "https://pubmed.ncbi.nlm.nih.gov/22822497/" }
+    ]
+  },
+  "ashwagandha": {
+    "id": "ashwagandha",
+    "commonName": "Ashwagandha (Indian Ginseng)",
+    "scientificName": "Withania somnifera",
+    "localNames": "Asgandh, Winter Cherry, Kanaje Hindi",
+    "botanicalFamily": "Solanaceae",
+    "medicinalProperties": ["Adaptogenic", "Neuroprotective", "Anxiolytic", "Anti-stress", "Endocrine Balancer"],
+    "traditionalUses": "Premier vitality Rasayana herb in Ayurveda, used for centuries to combat chronic stress, improve sleep architecture, and increase physical endurance.",
+    "potentialHealthBenefits": "Lowers serum cortisol, enhances cognitive retention and focus, modulates GABAergic signaling, and supports thyroid hormone balance.",
+    "partsUsed": ["Roots", "Leaves"],
+    "preparationMethods": "Finely milled root powder (Churna) boiled in warm milk with nutmeg; standardized root extract capsules.",
+    "precautions": "Avoid during pregnancy. Consult physician if on thyroid medications or central nervous system depressants.",
+    "knownToxicity": "Non-toxic at standard supplemental dosages (300-600mg extract/day).",
+    "references": [
+      { "title": "An Overview on Ashwagandha: A Rasayana of Ayurveda", "source": "PubMed", "url": "https://pubmed.ncbi.nlm.nih.gov/22754076/" }
+    ]
+  },
+  "brahmi": {
+    "id": "brahmi",
+    "commonName": "Brahmi (Water Hyssop)",
+    "scientificName": "Bacopa monnieri",
+    "localNames": "Brahmi, Jalnaveri, Neerbrahmi, Ondelaga",
+    "botanicalFamily": "Plantaginaceae",
+    "medicinalProperties": ["Nootropic (Brain Tonic)", "Memory Enhancer", "Neuroprotective", "Anxiolytic", "Synaptic Modulator"],
+    "traditionalUses": "Celebrated Medhya Rasayana herb taken by Ayurvedic scholars to sharpen memory, improve recall speed, enhance speech, and calm anxiety.",
+    "potentialHealthBenefits": "Bacosides cross the blood-brain barrier to repair damaged neurons, enhance synaptic neurotransmission, and mitigate mental fatigue.",
+    "partsUsed": ["Whole Plant", "Stems", "Leaves"],
+    "preparationMethods": "Fresh juice (swarasa) with ghee; Brahmi Ghrita (clarified butter infusion); standardized bacoside extract.",
+    "precautions": "Safe. Mild stomach upset or nausea may occur if taken on an empty stomach; best consumed with healthy fats (ghee/milk).",
+    "knownToxicity": "Non-toxic botanical nootropic.",
+    "references": [
+      { "title": "Neuropharmacological Review of the Nootropic Herb Bacopa monnieri", "source": "PubMed", "url": "https://pubmed.ncbi.nlm.nih.gov/23772138/" }
+    ]
+  },
+  "curry_leaf": {
+    "id": "curry_leaf",
+    "commonName": "Curry Leaf (Karivepaku)",
+    "scientificName": "Murraya koenigii",
+    "localNames": "Kadi Patta, Kariveppila, Meetha Neem, Karuvappilai",
+    "botanicalFamily": "Rutaceae (Citrus Family)",
+    "medicinalProperties": ["Carminative", "Antidiabetic", "Hair Follicle Nourisher", "Antioxidant (Carbazole Alkaloids)", "Cholesterol Modulator"],
+    "traditionalUses": "Essential staple of Indian cuisine and Siddha/Ayurvedic medicine for stimulating digestive agni, treating dysentery, and preventing premature hair graying.",
+    "potentialHealthBenefits": "Supports pancreatic beta-cell function, prevents oxidative breakdown of lipids, and fortifies hair roots with iron, beta-carotene, and protein.",
+    "partsUsed": ["Fresh Aromatic Leaves", "Bark", "Roots"],
+    "preparationMethods": "Chewing 8-10 raw fresh leaves early morning; paste applied as scalp mask with yogurt; leaves infused into coconut oil for hair tonic.",
+    "precautions": "Completely safe culinary food herb.",
+    "knownToxicity": "Non-toxic food spice.",
+    "references": [
+      { "title": "Murraya koenigii: A review on its medicinal and culinary properties", "source": "PubMed", "url": "https://pubmed.ncbi.nlm.nih.gov/23019445/" }
+    ]
+  },
+  "doddapatre": {
+    "id": "doddapatre",
+    "commonName": "Indian Borage (Ajwain Leaf / Doddapatre)",
+    "scientificName": "Coleus amboinicus (Plectranthus amboinicus)",
+    "localNames": "Doddapatre, Karpuravalli, Patharchur, Mexican Mint, Cuban Oregano",
+    "botanicalFamily": "Lamiaceae (Mint Family)",
+    "medicinalProperties": ["Antispasmodic", "Bronchodilator", "Expectorant", "Carminative", "Antimicrobial"],
+    "traditionalUses": "Household remedy across South India for relieving acute colds, wet coughs, infantile asthma, and indigestion. Succulent leaves are warmed and pressed.",
+    "potentialHealthBenefits": "Relaxes respiratory smooth muscle spasms, liquifies tenacious bronchial mucus, and relieves gas and bloating.",
+    "partsUsed": ["Fresh Succulent Leaves"],
+    "preparationMethods": "Leaf gently warmed on dry tawa and pressed to extract fresh juice with a drop of honey; fried in chickpea batter (Doddapatre Bajji) for easy pediatric dosing.",
+    "precautions": "Gentle and very safe for both children and adults.",
+    "knownToxicity": "Non-toxic edible aromatic herb.",
+    "references": [
+      { "title": "Plectranthus amboinicus (Lour.) Spreng: A review on phytochemistry and pharmacological aspects", "source": "PubMed", "url": "https://pubmed.ncbi.nlm.nih.gov/27041445/" }
+    ]
+  },
+  "neem": {
+    "id": "neem",
+    "commonName": "Neem (Margosa)",
+    "scientificName": "Azadirachta indica",
+    "localNames": "Nimba, Arishta, Veppamaram, Indian Lilac",
+    "botanicalFamily": "Meliaceae",
+    "medicinalProperties": ["Broad-spectrum Antimicrobial", "Antifungal", "Blood Purifier", "Anti-inflammatory", "Dermal Soother"],
+    "traditionalUses": "Known as 'the village pharmacy'. Leaves, bark, and seeds are traditionally used for purifying blood, managing eczema, psoriasis, acne, and oral health.",
+    "potentialHealthBenefits": "Inhibits dermatological pathogens, prevents plaque and gum infections, and supports liver detoxification.",
+    "partsUsed": ["Leaves", "Bark", "Twigs", "Seed Oil"],
+    "preparationMethods": "Fresh leaf paste applied on dermal blemishes; leaf bath for itching skin; bark water decoction for oral gargle.",
+    "precautions": "Internal use of seed oil is contraindicated in infants, children, and pregnant women. Leaves in moderation are safe.",
+    "knownToxicity": "Neem seed oil is toxic if ingested internally in large quantities.",
+    "references": [
+      { "title": "Therapeutic Role of Azadirachta indica (Neem)", "source": "PubMed", "url": "https://pubmed.ncbi.nlm.nih.gov/27019685/" }
+    ]
+  },
+  "tulasi": {
+    "id": "tulasi",
+    "commonName": "Tulsi (Holy Basil)",
+    "scientificName": "Ocimum sanctum (Ocimum tenuiflorum)",
+    "localNames": "Tulasi, Surasa, Krishna Tulsi, Rama Tulsi, Holy Basil",
+    "botanicalFamily": "Lamiaceae (Mint Family)",
+    "medicinalProperties": ["Adaptogenic", "Antimicrobial", "Immunomodulatory", "Anti-inflammatory", "Bronchodilator"],
+    "traditionalUses": "Revered across India as the sacred 'Queen of Herbs'. Extensively used for bronchial relief, coughs, colds, viral fever recovery, and stress resilience.",
+    "potentialHealthBenefits": "Relieves cold and congestion, modulates cellular antioxidant levels, and balances autonomic stress responses.",
+    "partsUsed": ["Leaves", "Flowers", "Seeds", "Stems"],
+    "preparationMethods": "Fresh leaf decoction/tea with ginger and honey; chewing 4-5 fresh leaves daily on an empty stomach.",
+    "precautions": "May slightly reduce blood glucose; monitor if taking anti-diabetic medication.",
+    "knownToxicity": "Non-toxic herbal food and tea botanical.",
+    "references": [
+      { "title": "Ocimum sanctum Linn. A reservoir plant for therapeutic applications", "source": "PubMed", "url": "https://pubmed.ncbi.nlm.nih.gov/20532021/" }
+    ]
+  },
+  "betel": {
+    "id": "betel",
+    "commonName": "Betel Leaf (Paan)",
+    "scientificName": "Piper betle",
+    "localNames": "Vettilai, Paan, Nagavalli, Tamalapaku",
+    "botanicalFamily": "Piperaceae (Pepper Family)",
+    "medicinalProperties": ["Digestive Stimulant", "Carminative", "Antimicrobial", "Wound Healing", "Anti-inflammatory"],
+    "traditionalUses": "Chewed post-meals across India to stimulate salivary and gastric secretions, eliminate halitosis, and soothe chest congestion in infants.",
+    "potentialHealthBenefits": "High in eugenol and hydroxychavicol, which neutralize anaerobic oral pathogens, relieve flatulence, and improve digestion.",
+    "partsUsed": ["Fresh Heart-shaped Leaves"],
+    "preparationMethods": "Chewed fresh plain (without tobacco/areca nut); leaf warmed with castor oil applied on chest for infant phlegm.",
+    "precautions": "Plain leaf is very beneficial. Do NOT combine with tobacco or slaked lime additives.",
+    "knownToxicity": "Pure green leaf is non-toxic and culinary.",
+    "references": [
+      { "title": "Piper betle L.: a review on its ethnopharmacological and phytochemical profile", "source": "PubMed", "url": "https://pubmed.ncbi.nlm.nih.gov/23724810/" }
+    ]
+  },
+  "mint": {
+    "id": "mint",
+    "commonName": "Pudina (Spearmint / Peppermint)",
+    "scientificName": "Mentha spicata / Mentha arvensis",
+    "localNames": "Pudina, Podina, Field Mint",
+    "botanicalFamily": "Lamiaceae",
+    "medicinalProperties": ["Carminative", "Cooling Antispasmodic", "Digestive Enhancer", "Decongestant"],
+    "traditionalUses": "Widely used in chutneys, teas, and summer tonics to prevent heat stroke, reduce nausea, and relieve abdominal cramping.",
+    "potentialHealthBenefits": "Menthol relaxes visceral smooth muscles, alleviating indigestion and bloating while clearing nasal passages.",
+    "partsUsed": ["Fresh Leaves", "Aerial Parts"],
+    "preparationMethods": "Fresh leaf infusion in hot or cold water; blended into refreshing digestive mint chutney.",
+    "precautions": "Extremely safe food herb.",
+    "knownToxicity": "Non-toxic culinary herb.",
+    "references": [
+      { "title": "A review of the bioactivity and potential health benefits of peppermint", "source": "PubMed", "url": "https://pubmed.ncbi.nlm.nih.gov/16767798/" }
+    ]
+  },
+  "hibiscus": {
+    "id": "hibiscus",
+    "commonName": "Hibiscus (Gudhal / Sembaruthi)",
+    "scientificName": "Hibiscus rosa-sinensis",
+    "localNames": "Sembaruthi, Gudhal, Dasavala, Japa Pushpa",
+    "botanicalFamily": "Malvaceae (Mallow Family)",
+    "medicinalProperties": ["Hair Follicle Regenerator", "Hypotensive", "Antioxidant", "Cooling Demulcent"],
+    "traditionalUses": "Classic Ayurvedic hair remedy. Leaves and red flowers are crushed into a slippery lather to cleanse scalp, stop hair fall, and cool the body.",
+    "potentialHealthBenefits": "Rich in mucilage, flavonoids, and fruit acids that hydrate scalp skin, prevent dandruff, and promote hair shaft diameter.",
+    "partsUsed": ["Flowers", "Leaves"],
+    "preparationMethods": "Fresh leaves crushed with water into natural conditioning shampoo; flower tea for cardiovascular wellness.",
+    "precautions": "Very safe.",
+    "knownToxicity": "Non-toxic botanical.",
+    "references": [
+      { "title": "Hibiscus rosa-sinensis: A review of pharmacological and phytochemical properties", "source": "PubMed", "url": "https://pubmed.ncbi.nlm.nih.gov/22438902/" }
+    ]
+  }
+}

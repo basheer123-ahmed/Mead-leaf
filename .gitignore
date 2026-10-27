@@ -4,3 +4,15 @@ dist/
 .DS_Store
 Thumbs.db
 *.log
+downloads/
+dataset/
+*.zip
+*.h5
+*.keras
+test_*.mjs
+sync_to_atlas.cjs
+update_modal_css.js
+*.backup
+git_tool.cjs
+
+

@@ -17,9 +17,10 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static frontend assets (from dist if built, or root)
-app.use(express.static(path.join(__dirname, 'dist')));
+// Serve root directory directly so the latest index.html is served
 app.use(express.static(path.join(__dirname)));
+// If dist assets are needed, serve as fallback
+app.use(express.static(path.join(__dirname, 'dist')));
 
 // API Routes
 app.get('/api/health', (req, res) => {
@@ -90,13 +91,9 @@ app.get('/api/plants', (req, res) => {
   });
 });
 
-// Catch-all route to serve landing page
+// Catch-all route to serve latest landing page
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'), (err) => {
-    if (err) {
-      res.sendFile(path.join(__dirname, 'index.html'));
-    }
-  });
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // Start Server if run directly
