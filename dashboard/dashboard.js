@@ -710,6 +710,38 @@ window.removeFavorite = function(name) {
   updateCounters();
 };
 
+function renderFavoritesGrid() {
+  const grid = document.getElementById('dash-favorites-grid');
+  if (!grid) return;
+
+  if (!savedFavorites.length) {
+    grid.innerHTML = '<div style="grid-column: 1 / -1; padding: 3rem 1.5rem; text-align: center; color: #64748B; background: #FFFFFF; border-radius: 16px; border: 1px dashed #CBD5E1;"><i data-lucide="heart" style="width: 36px; height: 36px; color: #CBD5E1; margin: 0 auto 0.75rem; display: block;"></i><div style="font-weight: 700; font-size: 1.1rem; color: #0F172A; margin-bottom: 0.25rem;">No saved favorites yet</div><p style="font-size: 0.88rem; color: #64748B; margin: 0;">Bookmark plants or nuts during identification to access them quickly here.</p></div>';
+    if (window.lucide) window.lucide.createIcons();
+    return;
+  }
+
+  grid.innerHTML = savedFavorites.map(fav => `
+    <div style="background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 14px; padding: 1.25rem; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 2px 6px rgba(0,0,0,0.02); transition: all 0.2s ease;">
+      <div>
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+          <span style="font-size: 0.72rem; font-weight: 700; color: #E11D48; background: #FFE4E6; padding: 0.2rem 0.55rem; border-radius: 9999px;">★ Saved Favorite</span>
+          <button onclick="removeFavorite('${fav.name}')" style="background: none; border: none; cursor: pointer; color: #94A3B8;" title="Remove Favorite">
+            <i data-lucide="trash-2" style="width: 16px; height: 16px;"></i>
+          </button>
+        </div>
+        <div style="font-weight: 800; color: #0F172A; font-size: 1.1rem; margin-bottom: 0.2rem;">${fav.name}</div>
+        <div style="font-style: italic; color: #15803D; font-size: 0.85rem; margin-bottom: 0.75rem;">${fav.sci || 'Botanical Specimen'}</div>
+        <div style="font-size: 0.8rem; color: #64748B;">${fav.type || 'Verified Specimen'}</div>
+      </div>
+      <button class="btn btn-secondary" onclick="switchTab('tab-plant-scan')" style="margin-top: 1rem; padding: 0.45rem 0.85rem; font-size: 0.82rem; justify-content: center; width: 100%;">
+        <span>Open Scanner</span>
+      </button>
+    </div>
+  `).join('');
+
+  if (window.lucide) window.lucide.createIcons();
+}
+
 function updateCounters() {
   const totalScans = document.getElementById('dash-total-scans');
   const totalFavs = document.getElementById('dash-favs-count');
